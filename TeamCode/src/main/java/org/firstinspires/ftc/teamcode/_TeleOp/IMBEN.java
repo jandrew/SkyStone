@@ -124,6 +124,7 @@ public class IMBEN extends OpMode
         // Tell the driver that initialization is complete.
         telemetry.addData("Bot", "Initialized");
         telemetry.addData("init", "Loop");
+        telemetry.addData("10101001101","THE BOT IS WORKING 01101010101010101");
     }
 
     /*
@@ -201,8 +202,6 @@ public class IMBEN extends OpMode
 
             BackRightPower = -Math.cos(Math.toRadians(Angle+135));
 
-             j
-
         }
 
         // scale the direction by power buttons
@@ -252,7 +251,7 @@ public class IMBEN extends OpMode
         telemetry.addData("right_trigger", RightTrigger);
         telemetry.addData("LeftStick_Degrees", Angle);
         telemetry.addData("MotorPower","Left Front(%.2f), Right Front (%.2f)", FrontLeftPower, FrontRightPower);
-        telemetry.addData("MotorPower","Left Back(%.2f), Right Back (%.2f)", BackLeftPower, BackRightPower);
+        telemetry.addData("MotorPower","Left Back(%.2f), Right Back (%.2f)", BackLeftPower, BackRightPower)
 
     }
 
