@@ -34,6 +34,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -50,12 +52,20 @@ public class IMBEN extends OpMode
     private DcMotor TopRight = null;
     private DcMotor BottomLeft = null;
     private DcMotor BottomRight = null;
+    private Servo Leftflipper = null;
+    private Servo Rightflipper = null;
+    private Servo Leftscoop = null;
+    private Servo Rightscoop = null;
 
     //bootleeeeeen
     private Boolean hasTopLeft =Boolean.FALSE;
     private Boolean hasTopRight =Boolean.FALSE;
     private Boolean hasBottomLeft =Boolean.FALSE;
     private Boolean hasBottomRight =Boolean.FALSE;
+    private Boolean hasLeftflipper =Boolean.FALSE;
+    private Boolean hasRightflipper =Boolean.FALSE;
+    private Boolean hasLeftscoop =Boolean.FALSE;
+    private Boolean hasRightscoop =Boolean.FALSE;
 
 
 
@@ -106,7 +116,48 @@ public class IMBEN extends OpMode
         catch (IllegalArgumentException iax)  {
             telemetry.addData("BottomLeft", "Failed");
         }
+        try{
+            BottomLeft  = hardwareMap.get(DcMotor.class, "Bottom_Left");
+            hasBottomLeft = Boolean.TRUE;
+            BottomLeft.setDirection(DcMotor.Direction.FORWARD);
+            telemetry.addData("BottomLeft", "Initialized");
+        }
+        catch (IllegalArgumentException iax)  {
+            telemetry.addData("BottomLeft", "Failed");
+        }
 
+        try{
+            Leftflipper  = hardwareMap.get(Servo.class, "left_flipper");
+            hasLeftflipper = Boolean.TRUE;
+            telemetry.addData("Leftflipper", "Initialized");
+        }
+        catch (IllegalArgumentException iax)  {
+            telemetry.addData("Leftflipper", "Failed");
+        }
+        try{
+            Rightflipper  = hardwareMap.get(Servo.class, "right_flipper");
+            hasRightflipper = Boolean.TRUE;
+            telemetry.addData("Rightflipper", "Initialized");
+        }
+        catch (IllegalArgumentException iax)  {
+            telemetry.addData("Rightflipper", "Failed");
+        }
+        try{
+            Leftscoop  = hardwareMap.get(Servo.class, "left_scoop");
+            hasLeftscoop = Boolean.TRUE;
+            telemetry.addData("Leftscoop", "Initialized");
+        }
+        catch (IllegalArgumentException iax)  {
+            telemetry.addData("Leftscoop", "Failed");
+        }
+        try{
+            Rightscoop  = hardwareMap.get(Servo.class, "right_scoop");
+            hasRightscoop = Boolean.TRUE;
+            telemetry.addData("Rightscoop", "Initialized");
+        }
+        catch (IllegalArgumentException iax)  {
+            telemetry.addData("Rightscoop", "Failed");
+        }
 
 //        // Initialize the hardware variables. Note that the strings used here as parameters
 //        // to 'get' must correspond to the names assigned during the robot configuration
@@ -150,15 +201,23 @@ public class IMBEN extends OpMode
 
         double LeftRight = gamepad1.left_stick_x;
         double Forwardbackward = -gamepad1.left_stick_y;
-        double Turning = gamepad1.right_stick_x;
-        double LeftTrigger = gamepad1.left_trigger * 0.8;
-        double RightTrigger = gamepad1.right_trigger * 0.2;
+        double Turning = -gamepad1.right_stick_x;
+        double LeftTrigger = gamepad1.left_trigger * 0.7;
+        double RightTrigger = gamepad1.right_trigger * 0.3;
         double Angle;
+        double gamepad2LeftFlipper = gamepad2.left_trigger;
+        double gamepad2RightFlipper = gamepad2.right_trigger;
+        double gamepad2LeftScoop = -gamepad2.left_stick_y;
+        double gamepad2RightScoop = -gamepad2.right_stick_y;
 
         double FrontRightPower = 0;
         double FrontLeftPower = 0;
         double BackRightPower = 0;
         double BackLeftPower = 0;
+//        double LeftFlipperPotition = 0;
+//        double RightFlipperPotition = 0;
+//        double LeftScoopPotition = 0;
+//        double RightScoopPotition = 0;
 
         //this is getting rid of negative zero yay!
         if(LeftRight > -0.000001 && LeftRight < 0.000001){
@@ -178,9 +237,17 @@ public class IMBEN extends OpMode
         }
         if(LeftRight > -0.000001 && LeftRight < 0.000001){
             LeftRight = 0;
+
+        }
+        if(gamepad2LeftScoop < 0.0000001){
+            gamepad2LeftScoop = 0;
         }
 
-        Angle =Math.toDegrees(Math.atan2(LeftRight,Forwardbackward));
+        if(gamepad2RightScoop < 0.000001){
+            gamepad2RightScoop = 0;
+        }
+
+        Angle = Math.toDegrees(Math.atan2(LeftRight,Forwardbackward));
 
         if(Angle < 0 ){
             Angle = Angle+360;
@@ -198,7 +265,7 @@ public class IMBEN extends OpMode
 
             FrontRightPower = Math.cos(Math.toRadians(Angle+45));
 
-            BackLeftPower = -Math.cos(Math.toRadians(Angle-135));
+            BackLeftPower = Math.cos(Math.toRadians(Angle-135));
 
             BackRightPower = -Math.cos(Math.toRadians(Angle+135));
 
@@ -243,6 +310,21 @@ public class IMBEN extends OpMode
         if(hasBottomRight) {
             BottomRight.setPower(BackRightPower);
         }
+        if(hasLeftflipper) {
+            Leftflipper.setPosition(gamepad2LeftFlipper);
+        }
+        if(hasRightflipper) {
+            Rightflipper.setPosition(gamepad2RightFlipper);
+        }
+        if(hasLeftscoop) {
+            Leftscoop.setPosition(gamepad2LeftScoop);
+        }
+        if(hasRightscoop) {
+            Rightscoop.setPosition(gamepad2RightScoop);
+        }
+
+
+
 
         telemetry.addData("left_stick_x", LeftRight);
         telemetry.addData("left_stick_y", Forwardbackward);
@@ -251,7 +333,9 @@ public class IMBEN extends OpMode
         telemetry.addData("right_trigger", RightTrigger);
         telemetry.addData("LeftStick_Degrees", Angle);
         telemetry.addData("MotorPower","Left Front(%.2f), Right Front (%.2f)", FrontLeftPower, FrontRightPower);
-        telemetry.addData("MotorPower","Left Back(%.2f), Right Back (%.2f)", BackLeftPower, BackRightPower)
+        telemetry.addData("MotorPower","Left Back(%.2f), Right Back (%.2f)", BackLeftPower, BackRightPower);
+        telemetry.addData("ScoopPotiton","Left (%.2f), Right (%.2f)", gamepad2LeftScoop, gamepad2RightScoop);
+        telemetry.addData("FlipperPotiton","Left (%.2f), Right (%.2f)", gamepad2LeftFlipper, gamepad2RightFlipper);
 
     }
 
