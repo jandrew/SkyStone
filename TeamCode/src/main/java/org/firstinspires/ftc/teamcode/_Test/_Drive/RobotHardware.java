@@ -9,10 +9,10 @@ import org.firstinspires.ftc.teamcode._Libs.BNO055IMUHeadingSensor;
 
 public class RobotHardware {
 
-    DcMotor[] mMotors;
-    BNO055IMUHeadingSensor mIMU;
+    public DcMotor[] mMotors;
+    public BNO055IMUHeadingSensor mIMU;
 
-    boolean init(OpMode opmode) {
+    public boolean init(OpMode opmode) {
         boolean bOkay = true;
         try {
             AutoLib.HardwareFactory mf = new AutoLib.RealHardwareFactory(opmode);
@@ -35,6 +35,8 @@ public class RobotHardware {
             // get hardware IMU and wrap gyro in HeadingSensor object usable below
             mIMU = new BNO055IMUHeadingSensor(opmode.hardwareMap.get(BNO055IMU.class, "imu"));
             mIMU.init(7);  // orientation of REV hub in my ratbot
+            mIMU.setDegreesPerTurn(355.0f);  // appears that's what my IMU does ... set this for your IMU
+
         }
         catch (IllegalArgumentException iax) {
             bOkay = false;
