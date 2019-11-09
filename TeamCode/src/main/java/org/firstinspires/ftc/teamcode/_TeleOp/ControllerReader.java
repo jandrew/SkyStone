@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode._TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -35,6 +35,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * This file contains an example of an iterative (Non-Linear) "OpMode".
@@ -50,14 +53,21 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Iterative OpMode", group="Iterative Opmode")
-@Disabled
-public class BasicOpMode_Iterative extends OpMode
+@TeleOp(name="ControllerReader", group="Test")
+//@Disabled
+public class ControllerReader extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftDrive = null;
-    private DcMotor rightDrive = null;
+    private DcMotor NorthEast = null;
+    private DcMotor NorthWest = null;
+    private DcMotor SouthEast = null;
+    private DcMotor SouthWest = null;
+    private Boolean hasNorthEast = false;
+    private Boolean hasNorthWest = false;
+    private Boolean hasSouthEast = false;
+    private Boolean hasSouthWest = false;
+
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -66,19 +76,44 @@ public class BasicOpMode_Iterative extends OpMode
     public void init() {
         telemetry.addData("Status", "Initialized");
 
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        try {
+            NorthEast = hardwareMap.get(DcMotor.class, "NE_M");
+            NorthEast.setDirection(DcMotor.Direction.FORWARD);
+            hasNorthEast = true;
+            telemetry.addData("NorthEast Motor", "Initialized");
+        } catch (IllegalArgumentException iax) {
+            telemetry.addData("NorthEast Motor", "Failed");
+        }
 
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        try {
+            NorthWest = hardwareMap.get(DcMotor.class, "NW_M");
+            NorthWest.setDirection(DcMotor.Direction.FORWARD);
+            hasNorthWest = true;
+            telemetry.addData("NorthWest Motor", "Initialized");
+        } catch (IllegalArgumentException iax) {
+            telemetry.addData("NorthWest Motor", "Failed");
+        }
 
-        // Tell the driver that initialization is complete.
-        telemetry.addData("Status", "Initialized");
+        try {
+            SouthWest = hardwareMap.get(DcMotor.class, "SW_M");
+            SouthWest.setDirection(DcMotor.Direction.FORWARD);
+            hasSouthWest = true;
+            telemetry.addData("Southwest Motor", "Initialized");
+        } catch (IllegalArgumentException iax) {
+            telemetry.addData("SouthWest Motor", "Failed");
+        }
+
+        try {
+            SouthEast = hardwareMap.get(DcMotor.class, "SE_M");
+            SouthEast.setDirection(DcMotor.Direction.FORWARD);
+            hasSouthEast = true;
+            telemetry.addData("SouthEast Motor", "Initialized");
+        } catch (IllegalArgumentException iax) {
+            telemetry.addData("SouthEast Motor", "Failed");
+        }
+
+
+
     }
 
     /*
@@ -86,6 +121,19 @@ public class BasicOpMode_Iterative extends OpMode
      */
     @Override
     public void init_loop() {
+        if (hasNorthEast){
+            NorthEast.setPower(0);
+        }
+        if (hasNorthWest){
+            NorthWest.setPower(0);
+        }
+        if (hasSouthEast){
+            SouthEast.setPower(0);
+        }
+        if (hasSouthWest){
+            SouthWest.setPower(0);
+        }
+
     }
 
     /*
@@ -96,37 +144,154 @@ public class BasicOpMode_Iterative extends OpMode
         runtime.reset();
     }
 
+
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
     @Override
     public void loop() {
         // Setup a variable for each drive wheel to save power level for telemetry
-        double leftPower;
-        double rightPower;
+        double NorthEastPower = 0;
+        double NorthWestPower = 0;
+        double SouthEastPower = 0;
+        double SouthWestPower = 0;
 
-        // Choose to drive using either Tank Mode, or POV Mode
-        // Comment out the method that's not used.  The default below is POV.
+        double controller_x = gamepad1.left_stick_x;
+        double controller_y = -gamepad1.left_stick_y;
+        double newX;
+        double newY;
 
-        // POV Mode uses left stick to go forward, and right stick to turn.
-        // - This uses basic math to combine motions and is easier to drive straight.
-        double drive = -gamepad1.left_stick_y;
-        double turn  =  gamepad1.right_stick_x;
-        leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-        rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+        double leftTrigger = gamepad1.left_trigger;
+        double rightTrigger = gamepad1.right_trigger;
 
-        // Tank Mode uses one stick to control each wheel.
-        // - This requires no math, but it is hard to drive forward slowly and keep straight.
-        // leftPower  = -gamepad1.left_stick_y ;
-        // rightPower = -gamepad1.right_stick_y ;
+        double spin = gamepad1.right_stick_x;
 
-        // Send calculated power to wheels
-        leftDrive.setPower(leftPower);
-        rightDrive.setPower(rightPower);
 
-        // Show the elapsed game time and wheel power.
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+        double turnRadians;
+        double turnAngle;
+
+        double powerAdj;
+
+
+        boolean DoSpin = false;
+        boolean useMotors = false;
+
+        if (hasSouthEast && hasNorthWest && hasNorthEast && hasSouthWest) {
+            useMotors = true;
+        }
+
+        if(controller_x > -0.000001 && controller_x < 0.000001){
+            controller_x = 0;
+        }
+        if(controller_y > -0.000001 && controller_y < 0.000001){
+            controller_y = 0;
+        }
+        if(spin > -0.000001 && spin < 0.000001){
+            spin = 0;
+        }
+
+        turnRadians = Math.atan2(controller_y,controller_x);
+        turnAngle = Math.toDegrees(turnRadians);
+
+        if (turnAngle < 0) {
+            turnAngle = 360 + turnAngle;
+        }
+        if (turnAngle == 0) {
+            turnAngle = 360;
+        }
+
+
+        newX = Math.cos(turnAngle);
+        newY = Math.sin(turnAngle);
+
+        if (Math.abs(controller_x)+Math.abs(controller_y) < 0.8){
+            SouthEastPower =0;
+            SouthWestPower =0;
+            NorthEastPower =0;
+            NorthWestPower =0;
+        }
+        else {
+            if (newY > .1) {
+                NorthEastPower = newY;
+                SouthWestPower = -newY;
+            }
+            else if (newY <= -.1) {
+                NorthEastPower = -newY;
+                SouthWestPower = newY;
+            }
+            if (newX > .1) {
+                NorthWestPower = -newX;
+                SouthEastPower = newX;
+            }
+            else if (newX <= -.1) {
+                NorthWestPower = newX;
+                SouthEastPower = -newX;
+            }
+        }
+
+        //.2 power
+        if (rightTrigger > 0) {
+            powerAdj = .2;
+        }
+        else if (leftTrigger > 0) {
+            powerAdj = .8;
+        }
+        else if (rightTrigger > 0 && leftTrigger > 0) {
+            powerAdj = 1;
+        }
+        else {
+            powerAdj = 0;
+        }
+
+
+
+
+        if (useMotors == true) {
+            if (spin != 0 && powerAdj > 0) {
+                if (spin < 0) {
+                    NorthEast.setPower(-powerAdj);
+                    NorthWest.setPower(-powerAdj);
+                    SouthEast.setPower(-powerAdj);
+                    SouthWest.setPower(-powerAdj);
+                }
+                else if (spin > 0) {
+                    NorthEast.setPower(powerAdj);
+                    NorthWest.setPower(powerAdj);
+                    SouthEast.setPower(powerAdj);
+                    SouthWest.setPower(powerAdj);
+                }
+
+            }
+            else if (DoSpin == false && powerAdj > 0) {
+
+                NorthEast.setPower(NorthEastPower*powerAdj);
+                NorthWest.setPower(NorthWestPower*powerAdj);
+                SouthEast.setPower(SouthEastPower*powerAdj);
+                SouthWest.setPower(SouthWestPower*powerAdj);
+
+                telemetry.addData("motors", null);
+
+            }
+        }
+
+
+
+
+
+
+        telemetry.addData("X-val", controller_x);
+        telemetry.addData("y_val", controller_y);
+        telemetry.addData("left trigger", leftTrigger);
+        telemetry.addData("right trigger", rightTrigger);
+        telemetry.addData("spin", spin);
+        telemetry.addData("turn angle", turnAngle);
+        telemetry.addData("NE", NorthEastPower);
+        telemetry.addData("NW", NorthWestPower);
+        telemetry.addData("SE", SouthEastPower);
+        telemetry.addData("SW", SouthWestPower);
+
+
+
     }
 
     /*
@@ -135,5 +300,9 @@ public class BasicOpMode_Iterative extends OpMode
     @Override
     public void stop() {
     }
+
+
+
+
 
 }
