@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode._Test._Drive;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -19,7 +20,7 @@ import org.firstinspires.ftc.teamcode._Libs.SensorLib;
 // simple example sequence that tests time based "squirrely wheel" drive steps to drive along a prescribed path
 // while stabilizing robot orientation with gyro inputs
 @Autonomous(name="Test: Squirrely Gyro Drive Test 1", group ="Test")
-//@Disabled
+@Disabled
 public class SquirrelyGyroDriveTestOp extends OpMode {
 
     AutoLib.Sequence mSequence;             // the root of the sequence tree

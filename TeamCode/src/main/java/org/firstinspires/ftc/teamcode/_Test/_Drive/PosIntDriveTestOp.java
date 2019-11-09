@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode._Test._Drive;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 
 // simple example sequence that tests encoder/gyro-based position integration to drive along a given path
 @Autonomous(name="Test: Pos Int Drive Test", group ="Test")
-//@Disabled
+@Disabled
 public class PosIntDriveTestOp extends OpMode {
 
     // use a single motor encoder and gyro to track absolute field position

@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode._Test._Drive;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode._Libs.AutoLib;
 import org.firstinspires.ftc.teamcode._Libs.BNO055IMUHeadingSensor;
-
-public class RobotHardware {
+@Disabled
+public class RobotHardware<disabled> {
 
     DcMotor[] mMotors;
     BNO055IMUHeadingSensor mIMU;
