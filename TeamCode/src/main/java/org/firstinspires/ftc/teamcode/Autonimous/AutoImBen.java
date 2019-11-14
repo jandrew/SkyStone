@@ -92,11 +92,11 @@ public class AutoImBen extends LinearOpMode {
         robot.BottomRight.setPower(FORWARD_SPEED);
         runtime.reset();
 
-        while (opModeIsActive() && (runtime.seconds() < 3.0)) {
+        while (opModeIsActive() && (runtime.seconds() < 1.3)) {
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
         }
-
+ 
         // Stop all motors
         robot.TopLeft.setPower(0);
         robot.TopRight.setPower(0);

@@ -84,80 +84,7 @@ public class Xdrive {
 
     /* Constructor */
     public Xdrive() {
-        try {
-            TopLeft = hwMap.get(DcMotor.class, "Top_Left");
-            TopLeft.setDirection(DcMotor.Direction.FORWARD);
-            TopLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            hasTopLeft = Boolean.TRUE;
-        } catch (IllegalArgumentException iax) {
-//            telemetry.addData("TopLeft", "Failed");
-        }
 
-
-        try {
-            TopRight = hwMap.get(DcMotor.class, "Top_Right");
-            hasTopRight = Boolean.TRUE;
-//            telemetry.addData("TopRight", "Initialized");
-        } catch (IllegalArgumentException iax) {
-//            telemetry.addData("TopRight", "Failed");
-        }
-
-
-        try {
-            BottomRight = hwMap.get(DcMotor.class, "Bottom_Right");
-            hasBottomRight = Boolean.TRUE;
-            BottomRight.setDirection(DcMotor.Direction.REVERSE);
-//            telemetry.addData("BottomRight", "Initialized");
-        } catch (IllegalArgumentException iax) {
-//            telemetry.addData("BottomRight", "Failed");
-        }
-
-
-        try {
-            BottomLeft = hwMap.get(DcMotor.class, "Bottom_Left");
-            hasBottomLeft = Boolean.TRUE;
-            BottomLeft.setDirection(DcMotor.Direction.FORWARD);
-//            telemetry.addData("BottomLeft", "Initialized");
-        } catch (IllegalArgumentException iax) {
-//            telemetry.addData("BottomLeft", "Failed");
-        }
-        try {
-            BottomLeft = hwMap.get(DcMotor.class, "Bottom_Left");
-            hasBottomLeft = Boolean.TRUE;
-            BottomLeft.setDirection(DcMotor.Direction.FORWARD);
-//            telemetry.addData("BottomLeft", "Initialized");
-        } catch (IllegalArgumentException iax) {
-//            telemetry.addData("BottomLeft", "Failed");
-        }
-
-        try {
-            Leftflipper = hwMap.get(Servo.class, "left_flipper");
-            hasLeftflipper = Boolean.TRUE;
-//            telemetry.addData("Leftflipper", "Initialized");
-        } catch (IllegalArgumentException iax) {
-//            telemetry.addData("Leftflipper", "Failed");
-        }
-        try {
-            Rightflipper = hwMap.get(Servo.class, "right_flipper");
-            hasRightflipper = Boolean.TRUE;
-//            telemetry.addData("Rightflipper", "Initialized");
-        } catch (IllegalArgumentException iax) {
-//            telemetry.addData("Rightflipper", "Failed");
-        }
-        try {
-            Leftscoop = hwMap.get(Servo.class, "left_scoop");
-            hasLeftscoop = Boolean.TRUE;
-//            telemetry.addData("Leftscoop", "Initialized");
-        } catch (IllegalArgumentException iax) {
-//            telemetry.addData("Leftscoop", "Failed");
-        }
-        try {
-            Rightscoop = hwMap.get(Servo.class, "right_scoop");
-            hasRightscoop = Boolean.TRUE;
-//            telemetry.addData("Rightscoop", "Initialized");
-        } catch (IllegalArgumentException iax) {
-//            telemetry.addData("Rightscoop", "Failed");
-        }
     }
 
     /* Initialize standard Hardware interfaces */
@@ -198,19 +125,12 @@ public class Xdrive {
         try {
             BottomLeft = hwMap.get(DcMotor.class, "Bottom_Left");
             hasBottomLeft = Boolean.TRUE;
-            BottomLeft.setDirection(DcMotor.Direction.FORWARD);
+            BottomLeft.setDirection(DcMotor.Direction.REVERSE);
 //            telemetry.addData("BottomLeft", "Initialized");
         } catch (IllegalArgumentException iax) {
 //            telemetry.addData("BottomLeft", "Failed");
         }
-        try {
-            BottomLeft = hwMap.get(DcMotor.class, "Bottom_Left");
-            hasBottomLeft = Boolean.TRUE;
-            BottomLeft.setDirection(DcMotor.Direction.FORWARD);
-//            telemetry.addData("BottomLeft", "Initialized");
-        } catch (IllegalArgumentException iax) {
-//            telemetry.addData("BottomLeft", "Failed");
-        }
+
 
         try {
             Leftflipper = hwMap.get(Servo.class, "left_flipper");
@@ -240,30 +160,30 @@ public class Xdrive {
         } catch (IllegalArgumentException iax) {
 //            telemetry.addData("Rightscoop", "Failed");
 
-            if (hasTopLeft) {
-                TopLeft.setPower(FrontLeftPower);
-            }
-            if (hasTopRight) {
-                TopRight.setPower(FrontRightPower);
-            }
-            if (hasBottomLeft) {
-                BottomLeft.setPower(BackLeftPower);
-            }
-            if (hasBottomRight) {
-                BottomRight.setPower(BackRightPower);
-            }
-            if (hasLeftflipper) {
-                Leftflipper.setPosition(0);
-            }
-            if (hasRightflipper) {
-                Rightflipper.setPosition(0);
-            }
-            if (hasLeftscoop) {
-                Leftscoop.setPosition(0);
-            }
-            if (hasRightscoop) {
-                Rightscoop.setPosition(0);
-            }
+//            if (hasTopLeft) {
+//                TopLeft.setPower(FrontLeftPower);
+//            }
+//            if (hasTopRight) {
+//                TopRight.setPower(FrontRightPower);
+//            }
+//            if (hasBottomLeft) {
+//                BottomLeft.setPower(BackLeftPower);
+//            }
+//            if (hasBottomRight) {
+//                BottomRight.setPower(BackRightPower);
+//            }
+//            if (hasLeftflipper) {
+//                Leftflipper.setPosition(0);
+//            }
+//            if (hasRightflipper) {
+//                Rightflipper.setPosition(0);
+//            }
+//            if (hasLeftscoop) {
+//                Leftscoop.setPosition(0);
+//            }
+//            if (hasRightscoop) {
+//                Rightscoop.setPosition(0);
+//            }
 
         }
     }
