@@ -61,9 +61,9 @@ import org.firstinspires.ftc.teamcode._Test._Drive.RobotHardware;
  * Step to a large value (10000) so it won't terminate on its own while we're driving.
  */
 
-@TeleOp(name="AbsoluteSquirrelyGyroDrive1", group="Test")  // @Autonomous(...) is the other common choice
+@TeleOp(name="LilyXDrive", group="Test")  // @Autonomous(...) is the other common choice
 //@Disabled
-public class AbsoluteSquirrelyGyroDrive1 extends OpMode {
+public class LilyXDrive extends OpMode {
 
 	AutoLib.SquirrelyGyroTimedDriveStep mStep;
 	RobotHardware rh;
@@ -73,7 +73,7 @@ public class AbsoluteSquirrelyGyroDrive1 extends OpMode {
 	/**
 	 * Constructor
 	 */
-	public AbsoluteSquirrelyGyroDrive1() {
+	public LilyXDrive() {
 
 	}
 
