@@ -129,8 +129,29 @@ public class AbsoluteSquirrelyGyroDrive1 extends OpMode {
 		float dx = gamepad1.right_stick_x;
 		float dy = -gamepad1.right_stick_y;	// y is reversed :(
 
+		// vehicle heading (orientation) is on the left stick (near the dpad, which also controls heading)
+		float hx = gamepad1.left_stick_x;
+		float hy = -gamepad1.left_stick_y;    // y is reversed :(
+
+		double power = 0;
+
+
+		if (gamepad1.right_trigger  > .05 && gamepad1.left_trigger > .05) {
+			//power = 1;
+			power = Math.sqrt(dx*dx + dy*dy);
+		}
+		else if (gamepad1.left_trigger > .05) {
+			//power = .8;
+			power = Math.sqrt(dx*dx + dy*dy) * .8;
+		}
+		else if (gamepad1.right_trigger > .05) {
+			//power = .2;
+			power = Math.sqrt(dx*dx + dy*dy) * .2;
+		}
+		telemetry.addData("power", power);
+
 		// power is the magnitude of the direction vector
-		double power = Math.sqrt(dx*dx + dy*dy);
+
 		mStep.setPower((float) power);
 
 		// make sure we can rotate even if we're not moving
@@ -145,12 +166,11 @@ public class AbsoluteSquirrelyGyroDrive1 extends OpMode {
 			mStep.setDirection((float) direction);
 		}
 
-		// vehicle heading (orientation) is on the left stick (near the dpad, which also controls heading)
-		float hx = gamepad1.left_stick_x;
-		float hy = -gamepad1.left_stick_y;    // y is reversed :(
+
 
 		double heading = 0;
 		boolean setHeading = false;
+
 		double hMag = Math.sqrt(hx*hx + hy*hy);
 		if (hMag > MIN_INPUT) {
 			// direction angle of stick >> the direction we want to face
