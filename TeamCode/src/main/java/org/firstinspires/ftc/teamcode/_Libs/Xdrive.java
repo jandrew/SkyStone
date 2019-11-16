@@ -96,8 +96,9 @@ public class Xdrive {
 
         try {
             TopLeft = hwMap.get(DcMotor.class, "Top_Left");
-            TopLeft.setDirection(DcMotor.Direction.FORWARD);
             hasTopLeft = Boolean.TRUE;
+            TopLeft.setDirection(DcMotor.Direction.FORWARD);
+            TopLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         } catch (IllegalArgumentException iax) {
 //            telemetry.addData("TopLeft", "Failed");
         }
@@ -106,6 +107,8 @@ public class Xdrive {
         try {
             TopRight = hwMap.get(DcMotor.class, "Top_Right");
             hasTopRight = Boolean.TRUE;
+            TopRight.setDirection(DcMotor.Direction.REVERSE);
+            TopRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //            telemetry.addData("TopRight", "Initialized");
         } catch (IllegalArgumentException iax) {
 //            telemetry.addData("TopRight", "Failed");
@@ -116,6 +119,7 @@ public class Xdrive {
             BottomRight = hwMap.get(DcMotor.class, "Bottom_Right");
             hasBottomRight = Boolean.TRUE;
             BottomRight.setDirection(DcMotor.Direction.REVERSE);
+            BottomRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //            telemetry.addData("BottomRight", "Initialized");
         } catch (IllegalArgumentException iax) {
 //            telemetry.addData("BottomRight", "Failed");
@@ -125,7 +129,8 @@ public class Xdrive {
         try {
             BottomLeft = hwMap.get(DcMotor.class, "Bottom_Left");
             hasBottomLeft = Boolean.TRUE;
-            BottomLeft.setDirection(DcMotor.Direction.REVERSE);
+            BottomLeft.setDirection(DcMotor.Direction.FORWARD);
+            BottomLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //            telemetry.addData("BottomLeft", "Initialized");
         } catch (IllegalArgumentException iax) {
 //            telemetry.addData("BottomLeft", "Failed");
