@@ -40,7 +40,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * This class can be used to define all the specific hardware for a single robot.
  * In this case that robot is a Pushbot.
  * See PushbotTeleopTank_Iterative and others classes starting with "Pushbot" for usage examples.
- *
+ * v
  * This hardware class assumes the following device names have been configured on the robot:
  * Note:  All names are lower case and some have single spaces between words.
  *
@@ -54,24 +54,30 @@ public class Xdrive {
     /* Public OpMode members. */
     // Declare OpMode members.
     public ElapsedTime runtime = new ElapsedTime();
-    public DcMotor TopLeft = null;
-    public DcMotor TopRight = null;
-    public DcMotor BottomLeft = null;
-    public DcMotor BottomRight = null;
-    public Servo Leftflipper = null;
-    public Servo Rightflipper = null;
-    public Servo Leftscoop = null;
-    public Servo Rightscoop = null;
+    public DcMotor FrontLeft = null;
+    public DcMotor FrontRight = null;
+    public DcMotor BackLeft = null;
+    public DcMotor BackRight = null;
+    public DcMotor Shoulder = null;
+    public DcMotor Waist = null;
+    public DcMotor Intake1 = null;
+    public DcMotor Intake2 = null;
+    public Servo Xwrist = null;
+    public Servo Ywrist = null;
+    public Servo Grab = null;
 
     //bootleeeeeen
-    public Boolean hasTopLeft = Boolean.FALSE;
-    public Boolean hasTopRight = Boolean.FALSE;
-    public Boolean hasBottomLeft = Boolean.FALSE;
-    public Boolean hasBottomRight = Boolean.FALSE;
-    public Boolean hasLeftflipper = Boolean.FALSE;
-    public Boolean hasRightflipper = Boolean.FALSE;
-    public Boolean hasLeftscoop = Boolean.FALSE;
-    public Boolean hasRightscoop = Boolean.FALSE;
+    public Boolean hasFrontLeft = Boolean.FALSE;
+    public Boolean hasFrontRight = Boolean.FALSE;
+    public Boolean hasBackLeft = Boolean.FALSE;
+    public Boolean hasBackRight = Boolean.FALSE;
+    public Boolean hasShoulder = Boolean.FALSE;
+    public Boolean hasWaist = Boolean.FALSE;
+    public Boolean hasIntake1 = Boolean.FALSE;
+    public Boolean hasIntake2 = Boolean.FALSE;
+    public Boolean hasXwrist = Boolean.FALSE;
+    public Boolean hasYwrist = Boolean.FALSE;
+    public Boolean hasGrab = Boolean.FALSE;
 
     public static final double FrontRightPower = 0;
     public static final double FrontLeftPower = 0;
@@ -91,99 +97,103 @@ public class Xdrive {
     public void init(HardwareMap ahwMap) {
 
 
-        // Save reference to Hardware map
         hwMap = ahwMap;
 
         try {
-            TopLeft = hwMap.get(DcMotor.class, "Top_Left");
-            TopLeft.setDirection(DcMotor.Direction.FORWARD);
-            hasTopLeft = Boolean.TRUE;
+            FrontLeft = hwMap.get(DcMotor.class, "FrontLeft");
+            hasFrontLeft = Boolean.TRUE;
+            FrontLeft.setDirection(DcMotor.Direction.FORWARD);
+            FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         } catch (IllegalArgumentException iax) {
-//            telemetry.addData("TopLeft", "Failed");
+//            telemetry.addData("FrontLeft", "Failed");
         }
 
 
         try {
-            TopRight = hwMap.get(DcMotor.class, "Top_Right");
-            hasTopRight = Boolean.TRUE;
-//            telemetry.addData("TopRight", "Initialized");
+            FrontRight = hwMap.get(DcMotor.class, "FrontRight");
+            hasFrontRight = Boolean.TRUE;
+            FrontRight.setDirection(DcMotor.Direction.REVERSE);
+            FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            telemetry.addData("FrontRight", "Initialized");
         } catch (IllegalArgumentException iax) {
-//            telemetry.addData("TopRight", "Failed");
+//            telemetry.addData("FrontRight", "Failed");
         }
 
 
         try {
-            BottomRight = hwMap.get(DcMotor.class, "Bottom_Right");
-            hasBottomRight = Boolean.TRUE;
-            BottomRight.setDirection(DcMotor.Direction.REVERSE);
-//            telemetry.addData("BottomRight", "Initialized");
+            BackRight = hwMap.get(DcMotor.class, "BackRight");
+            hasBackRight = Boolean.TRUE;
+            BackRight.setDirection(DcMotor.Direction.REVERSE);
+            BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            telemetry.addData("BackRight", "Initialized");
         } catch (IllegalArgumentException iax) {
-//            telemetry.addData("BottomRight", "Failed");
+//            telemetry.addData("BackRight", "Failed");
         }
 
 
         try {
-            BottomLeft = hwMap.get(DcMotor.class, "Bottom_Left");
-            hasBottomLeft = Boolean.TRUE;
-            BottomLeft.setDirection(DcMotor.Direction.REVERSE);
-//            telemetry.addData("BottomLeft", "Initialized");
+            BackLeft = hwMap.get(DcMotor.class, "BackLeft");
+            hasBackLeft = Boolean.TRUE;
+            BackLeft.setDirection(DcMotor.Direction.FORWARD);
+            BackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            telemetry.addData("BackLeft", "Initialized");
         } catch (IllegalArgumentException iax) {
-//            telemetry.addData("BottomLeft", "Failed");
+//            telemetry.addData("BackLeft", "Failed");
         }
 
+        try {
+            Shoulder = hwMap.get(DcMotor.class, "Shoulder");
+            hasShoulder = Boolean.TRUE;
+            Shoulder.setDirection(DcMotor.Direction.FORWARD);
+            Shoulder.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            telemetry.addData("Shoulder", "Initialized");
+        } catch (IllegalArgumentException iax) {
+//            telemetry.addData("Shoulder", "Failed");
+        }
 
         try {
-            Leftflipper = hwMap.get(Servo.class, "left_flipper");
-            hasLeftflipper = Boolean.TRUE;
-//            telemetry.addData("Leftflipper", "Initialized");
+            Waist = hwMap.get(DcMotor.class, "Waist");
+            hasWaist = Boolean.TRUE;
+            Waist.setDirection(DcMotor.Direction.FORWARD);
+            Waist.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            telemetry.addData("Waist", "Initialized");
         } catch (IllegalArgumentException iax) {
-//            telemetry.addData("Leftflipper", "Failed");
+//            telemetry.addData("Waist", "Failed");
         }
-        try {
-            Rightflipper = hwMap.get(Servo.class, "right_flipper");
-            hasRightflipper = Boolean.TRUE;
-//            telemetry.addData("Rightflipper", "Initialized");
-        } catch (IllegalArgumentException iax) {
-//            telemetry.addData("Rightflipper", "Failed");
-        }
-        try {
-            Leftscoop = hwMap.get(Servo.class, "left_scoop");
-            hasLeftscoop = Boolean.TRUE;
-//            telemetry.addData("Leftscoop", "Initialized");
-        } catch (IllegalArgumentException iax) {
-//            telemetry.addData("Leftscoop", "Failed");
-        }
-        try {
-            Rightscoop = hwMap.get(Servo.class, "right_scoop");
-            hasRightscoop = Boolean.TRUE;
-//            telemetry.addData("Rightscoop", "Initialized");
-        } catch (IllegalArgumentException iax) {
-//            telemetry.addData("Rightscoop", "Failed");
 
-//            if (hasTopLeft) {
-//                TopLeft.setPower(FrontLeftPower);
-//            }
-//            if (hasTopRight) {
-//                TopRight.setPower(FrontRightPower);
-//            }
-//            if (hasBottomLeft) {
-//                BottomLeft.setPower(BackLeftPower);
-//            }
-//            if (hasBottomRight) {
-//                BottomRight.setPower(BackRightPower);
-//            }
-//            if (hasLeftflipper) {
-//                Leftflipper.setPosition(0);
-//            }
-//            if (hasRightflipper) {
-//                Rightflipper.setPosition(0);
-//            }
-//            if (hasLeftscoop) {
-//                Leftscoop.setPosition(0);
-//            }
-//            if (hasRightscoop) {
-//                Rightscoop.setPosition(0);
-//            }
+        try {
+            Shoulder = hwMap.get(DcMotor.class, "Shoulder");
+            hasShoulder = Boolean.TRUE;
+            Shoulder.setDirection(DcMotor.Direction.FORWARD);
+            Shoulder.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            telemetry.addData("Shoulder", "Initialized");
+        } catch (IllegalArgumentException iax) {
+//            telemetry.addData("Shoulder", "Failed");
+        }
+
+        try {
+            Xwrist = hwMap.get(Servo.class, "Xwrist");
+            hasXwrist = Boolean.TRUE;
+//            telemetry.addData("Xwrist", "Initialized");
+        } catch (IllegalArgumentException iax) {
+//            telemetry.addData("Xwrist", "Failed");
+        }
+        try {
+            Ywrist = hwMap.get(Servo.class, "Ywrist");
+            hasYwrist = Boolean.TRUE;
+//            telemetry.addData("Ywrist", "Initialized");
+        } catch (IllegalArgumentException iax) {
+//            telemetry.addData("Ywrist", "Failed");
+        }
+
+        try {
+            Grab = hwMap.get(Servo.class, "Grab");
+            hasGrab = Boolean.TRUE;
+//            telemetry.addData("Grab", "Initialized");
+        } catch (IllegalArgumentException iax) {
+//            telemetry.addData("Grab", "Failed");
+
+//
 
         }
     }

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode._Test._Drive;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.vuforia.TrackableResult;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 
 // simple example sequence that tests encoder/gyro-based position integration to drive along a given path
 @Autonomous(name="Test: Skystone Auto Blue 1", group ="Test")
-//@Disabled
+@Disabled
 public class SkystoneAutoBlue1 extends OpMode {
 
     // return done when we're within tolerance distance of target position

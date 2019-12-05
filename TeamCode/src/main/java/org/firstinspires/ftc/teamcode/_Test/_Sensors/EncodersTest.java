@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode._Test._Sensors;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode._Libs.AutoLib;
  * Test motor encoders connected to encoder inputs of a RevHub
  */
 @Autonomous(name="Test: Encoders Test", group ="Test")
-//@Disabled
+@Disabled
 public class EncodersTest extends OpMode {
 
     DcMotor mMotors[];

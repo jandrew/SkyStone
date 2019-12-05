@@ -44,7 +44,8 @@ import java.util.Collection;
 import java.util.Collections;
 
 @TeleOp(name="Im Ben", group="Iterative Opmode")
-public class IMBEN extends OpMode
+public class
+IMBEN extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -76,7 +77,7 @@ public class IMBEN extends OpMode
     public void init() {
         telemetry.addData("Status", "Initialized");
         try{
-            TopLeft  = hardwareMap.get(DcMotor.class, "Top_Left");
+            TopLeft  = hardwareMap.get(DcMotor.class, "FrontLeft");
             TopLeft.setDirection(DcMotor.Direction.FORWARD);
             hasTopLeft = Boolean.TRUE;
             telemetry.addData("TopLeft", "Initialized");
@@ -87,8 +88,9 @@ public class IMBEN extends OpMode
 
 
         try{
-            TopRight  = hardwareMap.get(DcMotor.class, "Top_Right");
+            TopRight  = hardwareMap.get(DcMotor.class, "FrontRight");
             hasTopRight = Boolean.TRUE;
+            TopRight .setDirection(DcMotor.Direction.REVERSE);
             telemetry.addData("TopRight", "Initialized");
         }
         catch (IllegalArgumentException iax)  {
@@ -97,7 +99,7 @@ public class IMBEN extends OpMode
 
 
         try{
-            BottomRight  = hardwareMap.get(DcMotor.class, "Bottom_Right");
+            BottomRight  = hardwareMap.get(DcMotor.class, "BackRight");
             hasBottomRight = Boolean.TRUE;
             BottomRight.setDirection(DcMotor.Direction.REVERSE);
             telemetry.addData("BottomRight", "Initialized");
@@ -108,16 +110,7 @@ public class IMBEN extends OpMode
 
 
         try{
-            BottomLeft  = hardwareMap.get(DcMotor.class, "Bottom_Left");
-            hasBottomLeft = Boolean.TRUE;
-            BottomLeft.setDirection(DcMotor.Direction.FORWARD);
-            telemetry.addData("BottomLeft", "Initialized");
-        }
-        catch (IllegalArgumentException iax)  {
-            telemetry.addData("BottomLeft", "Failed");
-        }
-        try{
-            BottomLeft  = hardwareMap.get(DcMotor.class, "Bottom_Left");
+            BottomLeft  = hardwareMap.get(DcMotor.class, "BackLeft");
             hasBottomLeft = Boolean.TRUE;
             BottomLeft.setDirection(DcMotor.Direction.FORWARD);
             telemetry.addData("BottomLeft", "Initialized");
@@ -126,38 +119,8 @@ public class IMBEN extends OpMode
             telemetry.addData("BottomLeft", "Failed");
         }
 
-        try{
-            Leftflipper  = hardwareMap.get(Servo.class, "left_flipper");
-            hasLeftflipper = Boolean.TRUE;
-            telemetry.addData("Leftflipper", "Initialized");
-        }
-        catch (IllegalArgumentException iax)  {
-            telemetry.addData("Leftflipper", "Failed");
-        }
-        try{
-            Rightflipper  = hardwareMap.get(Servo.class, "right_flipper");
-            hasRightflipper = Boolean.TRUE;
-            telemetry.addData("Rightflipper", "Initialized");
-        }
-        catch (IllegalArgumentException iax)  {
-            telemetry.addData("Rightflipper", "Failed");
-        }
-        try{
-            Leftscoop  = hardwareMap.get(Servo.class, "left_scoop");
-            hasLeftscoop = Boolean.TRUE;
-            telemetry.addData("Leftscoop", "Initialized");
-        }
-        catch (IllegalArgumentException iax)  {
-            telemetry.addData("Leftscoop", "Failed");
-        }
-        try{
-            Rightscoop  = hardwareMap.get(Servo.class, "right_scoop");
-            hasRightscoop = Boolean.TRUE;
-            telemetry.addData("Rightscoop", "Initialized");
-        }
-        catch (IllegalArgumentException iax)  {
-            telemetry.addData("Rightscoop", "Failed");
-        }
+
+        //ben is the best humanbeing on the planet
 
 //        // Initialize the hardware variables. Note that the strings used here as parameters
 //        // to 'get' must correspond to the names assigned during the robot configuration
