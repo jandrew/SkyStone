@@ -218,7 +218,7 @@ public class SkystoneAutoBlue1 extends OpMode {
         rh.mIMU.setHeadingOffset(180);  // initially bot is facing in (Vuforia) field -Y direction, where (for us) +Y is bearing zero
         Position initialPosn = new Position(DistanceUnit.INCH, -36.0, 63.0, 0.0, 0);
         SensorLib.EncoderGyroPosInt.DriveType dt = //SensorLib.EncoderGyroPosInt.DriveType.XDRIVE;
-                        SensorLib.EncoderGyroPosInt.DriveType.MECANUM;
+                        SensorLib.EncoderGyroPosInt.DriveType.XDRIVE;
         mPosInt = new SensorLib.EncoderGyroPosInt(dt,this, rh.mIMU, rh.mMotors, countsPerRev, wheelDiam, initialPosn);
 
         // Start up Vuforia
