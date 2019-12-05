@@ -65,7 +65,7 @@ public class AutoImBen extends LinearOpMode {
 
 
     static final double     FORWARD_SPEED = 0.4;
-    static final double     TURN_SPEED    = 0.5;
+    static final double     TURN_SPEED    = 0.4;
 
     @Override
     public void runOpMode() {
@@ -86,10 +86,10 @@ public class AutoImBen extends LinearOpMode {
 
         // Move forward
 
-        robot.TopLeft.setPower(FORWARD_SPEED);
-        robot.TopRight.setPower(FORWARD_SPEED);
-        robot.BottomLeft.setPower(FORWARD_SPEED);
-        robot.BottomRight.setPower(FORWARD_SPEED);
+        robot.FrontLeft.setPower(FORWARD_SPEED);
+        robot.FrontRight.setPower(FORWARD_SPEED);
+        robot.BackLeft.setPower(FORWARD_SPEED);
+        robot.BackRight.setPower(FORWARD_SPEED);
         runtime.reset();
 
         while (opModeIsActive() && (runtime.seconds() < 1.3)) {
@@ -98,10 +98,10 @@ public class AutoImBen extends LinearOpMode {
         }
 
         // Stop all motors
-        robot.TopLeft.setPower(0);
-        robot.TopRight.setPower(0);
-        robot.BottomLeft.setPower(0);
-        robot.BottomRight.setPower(0);
+        robot.FrontLeft.setPower(0);
+        robot.FrontRight.setPower(0);
+        robot.BackLeft.setPower(0);
+        robot.BackRight.setPower(0);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

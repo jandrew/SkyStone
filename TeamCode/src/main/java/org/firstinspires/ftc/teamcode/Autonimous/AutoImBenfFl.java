@@ -86,10 +86,10 @@ public class AutoImBenfFl extends LinearOpMode {
 
         runtime.reset();
         // Move forward
-        robot.TopLeft.setPower(FORWARD_SPEED);
-        robot.TopRight.setPower(FORWARD_SPEED);
-        robot.BottomLeft.setPower(FORWARD_SPEED);
-        robot.BottomRight.setPower(FORWARD_SPEED);
+        robot.FrontLeft.setPower(FORWARD_SPEED);
+        robot.FrontRight.setPower(FORWARD_SPEED);
+        robot.BackLeft.setPower(FORWARD_SPEED);
+        robot.BackRight.setPower(FORWARD_SPEED);
 
         while (opModeIsActive() && (runtime.seconds() < 0.3)) {
             telemetry.addData("Direction", "Forward: %2.5f S Elapsed", runtime.seconds());
@@ -99,10 +99,10 @@ public class AutoImBenfFl extends LinearOpMode {
         //Stop
         runtime.reset();
 
-        robot.TopLeft.setPower(0);
-        robot.TopRight.setPower(0);
-        robot.BottomLeft.setPower(0);
-        robot.BottomRight.setPower(0);
+        robot.FrontLeft.setPower(0);
+        robot.FrontRight.setPower(0);
+        robot.BackLeft.setPower(0);
+        robot.BackRight.setPower(0);
 
         while (opModeIsActive() && (runtime.seconds() < 0.3)) {
             telemetry.addData("Direction", "Stopped: %2.5f S Elapsed", runtime.seconds());
@@ -111,10 +111,10 @@ public class AutoImBenfFl extends LinearOpMode {
 
         // Move left
 
-        robot.TopLeft.setPower(BACKWARD_SPEED);
-        robot.TopRight.setPower(FORWARD_SPEED);
-        robot.BottomLeft.setPower(FORWARD_SPEED);
-        robot.BottomRight.setPower(BACKWARD_SPEED);
+        robot.FrontLeft.setPower(BACKWARD_SPEED);
+        robot.FrontRight.setPower(FORWARD_SPEED);
+        robot.BackLeft.setPower(FORWARD_SPEED);
+        robot.BackRight.setPower(BACKWARD_SPEED);
 
 
         while (opModeIsActive() && (runtime.seconds() < 1.3)) {
@@ -124,10 +124,10 @@ public class AutoImBenfFl extends LinearOpMode {
 
 
         // Stop all motors
-        robot.TopLeft.setPower(0);
-        robot.TopRight.setPower(0);
-        robot.BottomLeft.setPower(0);
-        robot.BottomRight.setPower(0);
+        robot.FrontLeft.setPower(0);
+        robot.FrontRight.setPower(0);
+        robot.BackLeft.setPower(0);
+        robot.BackRight.setPower(0);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
