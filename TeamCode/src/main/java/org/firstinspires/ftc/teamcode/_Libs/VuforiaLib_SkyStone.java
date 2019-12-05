@@ -218,7 +218,7 @@ public class VuforiaLib_SkyStone implements HeadingSensor, LocationSensor {
 
         // Load the data sets for the trackable objects. These particular data
         // sets are stored in the 'assets' part of our application.
-        targetsSkyStone = this.vuforia.loadTrackablesFromAsset("Skystone", myVuforiaTrackableDefaultListener.class);
+        targetsSkyStone = this.vuforia.loadTrackablesFromAsset("Skystone");
 
         VuforiaTrackable stoneTarget = targetsSkyStone.get(0);
         stoneTarget.setName("Stone Target");
@@ -418,8 +418,8 @@ public class VuforiaLib_SkyStone implements HeadingSensor, LocationSensor {
 
             if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                 // get status data to see if we can trust this info
-                trackableStatus = ((myVuforiaTrackableDefaultListener)trackable.getListener()).getStatus();
-                trackableStatusInfo = ((myVuforiaTrackableDefaultListener)trackable.getListener()).getStatusInfo();
+                //trackableStatus = ((myVuforiaTrackableDefaultListener)trackable.getListener()).getStatus();
+                //trackableStatusInfo = ((myVuforiaTrackableDefaultListener)trackable.getListener()).getStatusInfo();
 
                 if (bTelemetry) {
                     mOpMode.telemetry.addData(trackable.getName(), "Visible");    //
