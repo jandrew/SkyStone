@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode._Libs.VuforiaLib_SkyStone;
  */
 
 @Autonomous(name="Test: Vuforia Navigation Test SkyStone", group ="Test")
-@Disabled
+//@Disabled
 public class VuforiaNavigationTestSkyStone extends OpMode {
 
     VuforiaLib_SkyStone mVLib;
