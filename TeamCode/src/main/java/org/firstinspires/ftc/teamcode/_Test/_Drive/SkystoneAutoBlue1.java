@@ -75,12 +75,12 @@ public class SkystoneAutoBlue1 extends OpMode {
 
     // Step: drive to given absolute field position while facing in the given direction using given EncoderGyroPosInt
     // and (optional) Vuforia lib that supplies occasional position updates to that PositionIntegrator
-    class SqPosIntDriveToStep extends AutoLib.GuidedTerminatedDriveStep {
+    class VfSqPosIntDriveToStep extends AutoLib.GuidedTerminatedDriveStep {
 
         SensorLib.EncoderGyroPosInt mPosInt;
         Position mTarget;
 
-        public SqPosIntDriveToStep(OpMode opmode, SensorLib.EncoderGyroPosInt posInt, DcMotor[] motors,
+        public VfSqPosIntDriveToStep(OpMode opmode, SensorLib.EncoderGyroPosInt posInt, DcMotor[] motors,
                                    float power, SensorLib.PID pid, Position target, float heading, double tolerance, boolean stop)
         {
             super(opmode, new VfSqGyroPosIntGuideStep(opmode, mVLib, posInt, target, heading, pid, null, power, tolerance),
@@ -263,7 +263,7 @@ public class SkystoneAutoBlue1 extends OpMode {
 
         // get closer to the Skystones so Vuforia can see the Skystone image better
         Position lookLoc = new Position(DistanceUnit.INCH, -36, 40+ROBOT_LENGTH/2, 0., 0);
-        mSequence.add(new SqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid, lookLoc, -90+boff, tol, true));
+        mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid, lookLoc, -90+boff, tol, true));
 
         // look for the Skystone with the image and update the target Position for the next move to go to it
         // default to the middle Stone if we don't see one ...
@@ -275,7 +275,7 @@ public class SkystoneAutoBlue1 extends OpMode {
         cs1.add(new LogPosition(this, "skyLoc", skyLoc,0.0f));       // ... and report target position while searching
 
         // drive to the SkyStone if we found it, otherwise to the default (middle) stone.
-        mSequence.add(new SqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid, skyLoc, -90+boff, tol, true));
+        mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid, skyLoc, -90+boff, tol, true));
 
         // grab the Skystone
         // mSequence.add(new AutoLib.ServoStep());
@@ -284,10 +284,10 @@ public class SkystoneAutoBlue1 extends OpMode {
         // back up a bit to pull the stone out of the line of stones
         Position pullLoc = new Position(DistanceUnit.INCH, 0, 0, 0., 0);
         mSequence.add(new ComputePositionStep(skyLoc, new Position(DistanceUnit.INCH, 0, 12, 0, 0), pullLoc));
-        mSequence.add(new SqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid, pullLoc, -90+boff, tol, false));
+        mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid, pullLoc, -90+boff, tol, false));
 
         // go to the Blue Foundation
-        mSequence.add(new SqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
+        mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
                 new Position(DistanceUnit.INCH, 48, 32, 0., 0), -90+boff, tol, true));
 
         // do the next two Steps in parallel
@@ -303,7 +303,7 @@ public class SkystoneAutoBlue1 extends OpMode {
         cs2.add(new AutoLib.LogTimeStep(this, "grab Foundation", 2));
 
         // drag the Foundation to the Building Area
-        mSequence.add(new SqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
+        mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
                 new Position(DistanceUnit.INCH, 48, 62, 0., 0), -90+boff, tol, true));
 
         // release the Foundation
@@ -311,13 +311,13 @@ public class SkystoneAutoBlue1 extends OpMode {
         mSequence.add(new AutoLib.LogTimeStep(this, "release Foundation", 2));
 
         // slide out of the corridor left by positioning the Foundation
-        mSequence.add(new SqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
+        mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
                 new Position(DistanceUnit.INCH, 0, 62, 0., 0), -90+boff, tol, false));
-        mSequence.add(new SqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
+        mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
                 new Position(DistanceUnit.INCH, 0, 48, 0., 0), -90+boff, tol, false));
 
         // return to the quarry for a second SkyStone
-        mSequence.add(new SqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
+        mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
                 new Position(DistanceUnit.INCH, -60, 32, 0., 0), -90+boff, tol, true));
 
         // grab the Skystone
@@ -325,13 +325,13 @@ public class SkystoneAutoBlue1 extends OpMode {
         mSequence.add(new AutoLib.LogTimeStep(this, "grab Stone", 2));
 
         // back up a bit to pull the stone out of the line of stones
-        mSequence.add(new SqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
+        mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
                 new Position(DistanceUnit.INCH, -60, 40, 0., 0), -90+boff, tol, false));
 
         // bring it to the audience end of the Foundation via the Blue Skybridge
-        mSequence.add(new SqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
+        mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
                 new Position(DistanceUnit.INCH, 0, 48, 0., 0), -90+boff, tol, false));
-        mSequence.add(new SqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
+        mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
                 new Position(DistanceUnit.INCH, 24, 60, 0., 0), 0+boff, tol, true));
 
         // drop the Skystone
@@ -339,7 +339,7 @@ public class SkystoneAutoBlue1 extends OpMode {
         mSequence.add(new AutoLib.LogTimeStep(this, "drop Stone", 2));
 
         // park under the SkyBridge
-        mSequence.add(new SqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
+        mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
                 new Position(DistanceUnit.INCH, 0, 48, 0., 0), 0+boff, tol, true));
 
         // start out not-done
