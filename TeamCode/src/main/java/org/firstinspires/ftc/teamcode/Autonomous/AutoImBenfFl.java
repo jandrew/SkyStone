@@ -90,7 +90,7 @@ public class AutoImBenfFl extends LinearOpMode {
             hasLeftToe = true;
 
             //make left toe begin in upwards position
-            leftToe.setPosition(0);
+            leftToe.setPosition(0.7);
         }
 
         catch (IllegalArgumentException iax) {
@@ -163,14 +163,7 @@ public class AutoImBenfFl extends LinearOpMode {
         robot.BackLeft.setPower(0);
         robot.BackRight.setPower(0);
 
-        //Move toes to position
-        if (hasLeftToe){
-            leftToe.setPosition(0.1);
-        }
-        if (hasRightToe){
-            rightToe.setPosition(0.7);
-        }
-        
+
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);
