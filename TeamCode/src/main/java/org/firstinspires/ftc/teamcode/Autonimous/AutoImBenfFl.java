@@ -86,10 +86,10 @@ public class AutoImBenfFl extends LinearOpMode {
 
         runtime.reset();
         // Move forward
-        robot.FrontLeft.setPower(FORWARD_SPEED);
-        robot.FrontRight.setPower(FORWARD_SPEED);
-        robot.BackLeft.setPower(FORWARD_SPEED);
-        robot.BackRight.setPower(FORWARD_SPEED);
+        robot.FrontLeft.setPower(BACKWARD_SPEED);
+        robot.FrontRight.setPower(BACKWARD_SPEED);
+        robot.BackLeft.setPower(BACKWARD_SPEED);
+        robot.BackRight.setPower(BACKWARD_SPEED);
 
         while (opModeIsActive() && (runtime.seconds() < 0.3)) {
             telemetry.addData("Direction", "Forward: %2.5f S Elapsed", runtime.seconds());
@@ -111,10 +111,10 @@ public class AutoImBenfFl extends LinearOpMode {
 
         // Move left
 
-        robot.FrontLeft.setPower(BACKWARD_SPEED);
-        robot.FrontRight.setPower(FORWARD_SPEED);
-        robot.BackLeft.setPower(FORWARD_SPEED);
-        robot.BackRight.setPower(BACKWARD_SPEED);
+        robot.FrontLeft.setPower(FORWARD_SPEED);
+        robot.FrontRight.setPower(BACKWARD_SPEED);
+        robot.BackLeft.setPower(BACKWARD_SPEED);
+        robot.BackRight.setPower(FORWARD_SPEED);
 
 
         while (opModeIsActive() && (runtime.seconds() < 1.3)) {

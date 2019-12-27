@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-@TeleOp(name="Im Ben", group="Iterative Opmode")
+@TeleOp(name="Im Ben", group="Savvy is cooler than you")
 public class
 IMBEN extends OpMode
 {
@@ -221,11 +221,11 @@ IMBEN extends OpMode
         double RightTrigger = gamepad1.right_trigger;
         double Angle;
 
-        double Xwrist = gamepad2.
-        double Ywrist = gamepad2.right_trigge
-        double Grab = gamepad2.left_stick
-        double Waist = gamepad2.left_stick
-        double Shoulder = gamepad2.left_stick
+//        double Xwrist = gamepad2.
+//        double Ywrist = gamepad2.right_trigge
+//        double Grab = gamepad2.left_stick
+//        double Waist = gamepad2.left_stick
+//        double Shoulder = gamepad2.left_stick
 
         //speed formula
         double Speed = (LeftTrigger * 0.4 + RightTrigger * 0.6) * Math.sqrt(2);
