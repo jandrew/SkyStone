@@ -62,6 +62,13 @@ public class AutoImBenfFl extends LinearOpMode {
     Xdrive         robot   = new Xdrive();   // Use a Pushbot's hardware
     private ElapsedTime     runtime = new ElapsedTime();
 
+    //declaring servos
+    private Servo leftToe;
+    private Servo rightToe;
+
+    //
+    private Boolean hasLeftToe = false;
+    private Boolean hasRightToe = false;
 
     static final double     FORWARD_SPEED = 0.4;
     static final double     BACKWARD_SPEED = -0.4;
@@ -74,6 +81,33 @@ public class AutoImBenfFl extends LinearOpMode {
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
+
+        //track if servos are connected
+        try {
+            leftToe = hardwareMap.get(Servo.class, "leftToe");
+            telemetry.addData("servo", "Left toe initialized");
+            hasLeftToe = true;
+
+            //make left toe begin in upwards position
+            leftToe.setPosition(-.2);
+        }
+
+        catch (IllegalArgumentException iax) {
+            telemetry.addData("servo", "Servo isn't working you diddly dumbdumb ding fling");
+        }
+
+        //right toe connection
+        try {
+            rightToe = hardwareMap.get(Servo.class, "rightToe");
+            telemetry.addData("servo", "Right toe is initialized");
+            hasRightToe = true;
+
+            //make right toe begin in upwards position
+            rightToe.setPosition(-.2);
+        }
+        catch (IllegalArgumentException iax) {
+            telemetry.addData("servo", "Servo isn't working you diddly dumbdumb ding fling");
+        }
 
 
         // Send telemetry message to signify robot waiting;
@@ -122,13 +156,20 @@ public class AutoImBenfFl extends LinearOpMode {
             telemetry.update();
         }
 
-
         // Stop all motors
         robot.FrontLeft.setPower(0);
         robot.FrontRight.setPower(0);
         robot.BackLeft.setPower(0);
         robot.BackRight.setPower(0);
 
+        //Move toes to position
+        if (hasLeftToe){
+            leftToe.setPosition(0.2);
+        }
+        if (hasRightToe){
+            rightToe.setPosition(0.2);
+        }
+        
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);
