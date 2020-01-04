@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-@TeleOp(name="Im Ben", group="Savvy is cooler than you")
+@TeleOp(name="Im Ben", group="Ben is Awesome too")
 public class
 IMBEN extends OpMode
 {

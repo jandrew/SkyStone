@@ -44,7 +44,7 @@ import com.qualcomm.robotcore.util.Range;
  * <p>
  * Enables control of the robot via the gamepad
  */
-@TeleOp(name="Simple_Drive", group="Savvy is Awesome with a capital A")  // @Autonomous(...) is the other common choice
+@TeleOp(name="Simple_Drive", group="!Savvy is Awesome with a capital A")  // @Autonomous(...) is the other common choice
 //@Disabled
 public class Simple_Drive extends OpMode {
 
