@@ -23,11 +23,12 @@ public class RobotHardware {
             // get the motors:
             // assumed order is fr, br, fl, bl
             mMotors = new DcMotor[4];
-            mMotors[0] = mf.getDcMotor("fr");
+
+            mMotors[0] = mf.getDcMotor("FrontRight");
             if (mMotors[0] != null) {
-                mMotors[1] = mf.getDcMotor("br");
-                (mMotors[2] = mf.getDcMotor("fl")).setDirection(DcMotor.Direction.REVERSE);
-                (mMotors[3] = mf.getDcMotor("bl")).setDirection(DcMotor.Direction.REVERSE);
+                mMotors[1] = mf.getDcMotor("BackRight");
+                (mMotors[2] = mf.getDcMotor("FrontLeft")).setDirection(DcMotor.Direction.REVERSE);
+                (mMotors[3] = mf.getDcMotor("BackLeft")).setDirection(DcMotor.Direction.REVERSE);
             }
             else {  // assume we're using the 2-wheel bot simulation
                 mMotors[0] = mMotors[1] = mf.getDcMotor("right_motor");

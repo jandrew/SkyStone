@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode._Test._Drive;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.vuforia.TrackableResult;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 
 // simple example sequence that tests encoder/gyro-based position integration to drive along a given path
 @Autonomous(name="Test: Skystone Auto Blue 1", group ="Test")
-//@Disabled
+@Disabled
 public class SkystoneAutoBlue1 extends OpMode {
 
     // guide step that uses a gyro and a position integrator to determine how to guide the robot to the target
@@ -213,7 +214,7 @@ public class SkystoneAutoBlue1 extends OpMode {
         rh.mIMU.setHeadingOffset(180);  // initially bot is facing in (Vuforia) field -Y direction, whereas, for us, +Y is bearing zero
         Position initialPosn = new Position(DistanceUnit.INCH, -36.0, 72.0-ROBOT_LENGTH/2, 0.0, 0); // at the BLUE wall
         SensorLib.EncoderGyroPosInt.DriveType dt = //SensorLib.EncoderGyroPosInt.DriveType.XDRIVE;
-                        SensorLib.EncoderGyroPosInt.DriveType.MECANUM;
+                        SensorLib.EncoderGyroPosInt.DriveType.XDRIVE;
         mPosInt = new SensorLib.EncoderGyroPosInt(dt,this, rh.mIMU, rh.mMotors, countsPerRev, wheelDiam, initialPosn);
 
         // (option) Start up Vuforia

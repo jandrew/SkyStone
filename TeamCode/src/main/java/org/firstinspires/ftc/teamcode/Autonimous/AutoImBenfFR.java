@@ -30,11 +30,10 @@
 package org.firstinspires.ftc.teamcode.Autonimous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.teamcode._Libs.Xdrive;
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode._Libs.Xdrive;
 
 /**
  * This file illustrates the concept of driving up to a line and then stopping.
@@ -56,16 +55,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="AutoImBen", group="Xdrive")
+@Autonomous(name="AutoImBen. ForwardRight", group="Xdrive")
 //@Disabled
-public class AutoImBen extends LinearOpMode {
+public class AutoImBenfFR  extends LinearOpMode {
 
     Xdrive         robot   = new Xdrive();   // Use a Pushbot's hardware
     private ElapsedTime     runtime = new ElapsedTime();
 
 
     static final double     FORWARD_SPEED = 0.4;
-    static final double     TURN_SPEED    = 0.4;
+    static final double     BACKWARD_SPEED = -0.4;
+//    static final double     TURN_SPEED    = 0.4;
 
     @Override
     public void runOpMode() {
@@ -84,18 +84,44 @@ public class AutoImBen extends LinearOpMode {
         // Abort this loop is started or stopped.
         waitForStart();
 
-        // Move forward
-
-        robot.FrontLeft.setPower(FORWARD_SPEED);
-        robot.FrontRight.setPower(FORWARD_SPEED);
-        robot.BackLeft.setPower(FORWARD_SPEED);
-        robot.BackRight.setPower(FORWARD_SPEED);
         runtime.reset();
+        // Move forward
+        robot.FrontLeft.setPower(BACKWARD_SPEED);
+        robot.FrontRight.setPower(BACKWARD_SPEED);
+        robot.BackLeft.setPower(BACKWARD_SPEED);
+        robot.BackRight.setPower(BACKWARD_SPEED);
 
-        while (opModeIsActive() && (runtime.seconds() < 1.3)) {
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+        while (opModeIsActive() && (runtime.seconds() < 0.3)) {
+            telemetry.addData("Direction", "Forward: %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
         }
+
+        //Stop
+        runtime.reset();
+
+        robot.FrontLeft.setPower(0);
+        robot.FrontRight.setPower(0);
+        robot.BackLeft.setPower(0);
+        robot.BackRight.setPower(0);
+
+        while (opModeIsActive() && (runtime.seconds() < 0.3)) {
+            telemetry.addData("Direction", "Stopped: %2.5f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+
+        // Move left
+
+        robot.FrontLeft.setPower(BACKWARD_SPEED);
+        robot.FrontRight.setPower(FORWARD_SPEED);
+        robot.BackLeft.setPower(FORWARD_SPEED);
+        robot.BackRight.setPower(BACKWARD_SPEED);
+
+
+        while (opModeIsActive() && (runtime.seconds() < 1.3)) {
+            telemetry.addData("Direction", "Right: %2.5f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+
 
         // Stop all motors
         robot.FrontLeft.setPower(0);
