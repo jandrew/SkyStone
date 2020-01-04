@@ -29,18 +29,13 @@
 
 package org.firstinspires.ftc.teamcode._TeleOp;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 @TeleOp(name="Im Ben", group="Ben is Awesome too")
@@ -100,7 +95,7 @@ IMBEN extends OpMode
         try{
             TopRight  = hardwareMap.get(DcMotor.class, "FrontRight");
             hasTopRight = Boolean.TRUE;
-            TopRight .setDirection(DcMotor.Direction.FORWARD);
+            TopRight.setDirection(DcMotor.Direction.FORWARD);
             telemetry.addData("TopRight", "Initialized");
         }
         catch (IllegalArgumentException iax)  {
