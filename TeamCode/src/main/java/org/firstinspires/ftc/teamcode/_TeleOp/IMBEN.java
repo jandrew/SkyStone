@@ -29,18 +29,13 @@
 
 package org.firstinspires.ftc.teamcode._TeleOp;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 @TeleOp(name="Im Ben", group="Ben is Awesome too")
@@ -53,11 +48,17 @@ IMBEN extends OpMode
     private DcMotor TopRight = null;
     private DcMotor BottomLeft = null;
     private DcMotor BottomRight = null;
+
+    //ARM
     private DcMotor Waist = null;
     private DcMotor Shoulder = null;
     private Servo Xwrist = null;
     private Servo Ywrist = null;
     private Servo Grab = null;
+
+    // Roly poooolllyyty
+    private DcMotor leftRoly = null;
+    private DcMotor rightRoly = null;
 
 
     //bootleeeeeen
@@ -70,6 +71,8 @@ IMBEN extends OpMode
     private Boolean hasXwrist =Boolean.FALSE;
     private Boolean hasYwrist =Boolean.FALSE;
     private Boolean hasGrab =Boolean.FALSE;
+    private Boolean hasleftRoly =Boolean.FALSE;
+    private Boolean hasrightRoly =Boolean.FALSE;
 
 
     /*
@@ -92,7 +95,7 @@ IMBEN extends OpMode
         try{
             TopRight  = hardwareMap.get(DcMotor.class, "FrontRight");
             hasTopRight = Boolean.TRUE;
-            TopRight .setDirection(DcMotor.Direction.FORWARD);
+            TopRight.setDirection(DcMotor.Direction.FORWARD);
             telemetry.addData("TopRight", "Initialized");
         }
         catch (IllegalArgumentException iax)  {
@@ -172,6 +175,26 @@ IMBEN extends OpMode
         catch (IllegalArgumentException iax)  {
             telemetry.addData("Grab", "Failed");
         }
+
+
+        try{
+            leftRoly  = hardwareMap.get(DcMotor.class, "left_Roly");
+            hasleftRoly = Boolean.TRUE;
+            leftRoly.setDirection(DcMotor.Direction.FORWARD);
+            telemetry.addData("leftRoly", "Initialized");
+        }
+        catch (IllegalArgumentException iax)  {
+            telemetry.addData("leftRoly", "Failed");
+        }
+        try{
+            rightRoly  = hardwareMap.get(DcMotor.class, "right_Roly");
+            hasrightRoly = Boolean.TRUE;
+            rightRoly.setDirection(DcMotor.Direction.REVERSE);
+            telemetry.addData("rightRoly", "Initialized");
+        }
+        catch (IllegalArgumentException iax)  {
+            telemetry.addData("rightRoly", "Failed");
+        }
         //ben is the best humanbeing on the planet
 
 //        // Initialize the hardware variables. Note that the strings used here as parameters
@@ -221,16 +244,14 @@ IMBEN extends OpMode
         double RightTrigger = gamepad1.right_trigger;
         double Angle;
 
-//        double Xwrist = gamepad2.
-//        double Ywrist = gamepad2.right_trigge
-//        double Grab = gamepad2.left_stick
+        double rollyOut = -gamepad2.left_trigger;
+        double rollyIn = gamepad2.right_trigger;
+
 //        double Waist = gamepad2.left_stick
 //        double Shoulder = gamepad2.left_stick
 
         //speed formula
         double Speed = (LeftTrigger * 0.4 + RightTrigger * 0.6) * Math.sqrt(2);
-
-
 
         double FrontRightPower = 0;
         double FrontLeftPower = 0;
@@ -240,6 +261,14 @@ IMBEN extends OpMode
         double YwristPotition = 0;
         double GrabPotition = 0;
 
+
+
+        if(hasleftRoly){
+            leftRoly.setPower (rollyOut + rollyIn);
+        }
+        if(hasrightRoly) {
+            rightRoly.setPower (rollyOut + rollyIn);
+        }
         //this is getting rid of negative zero yay!
         if(LeftRight > -0.000001 && LeftRight < 0.000001){
             LeftRight = 0;
@@ -327,8 +356,9 @@ IMBEN extends OpMode
         telemetry.addData("left_trigger", LeftTrigger);
         telemetry.addData("right_trigger", RightTrigger);
         telemetry.addData("LeftStick_Degrees", Angle);
-        telemetry.addData("    MotorPower","Left Front(%.2f), Right Front (%.2f)", FrontLeftPower, FrontRightPower);
+        telemetry.addData("MotorPower","Left Front(%.2f), Right Front (%.2f)", FrontLeftPower, FrontRightPower);
         telemetry.addData("MotorPower","Left Back(%.2f), Right Back (%.2f)", BackLeftPower, BackRightPower);
+        telemetry.addData("rolliMotors","Left (%.2f), Right (%.2f)", rollyOut + rollyIn, rollyOut + rollyIn);
 
     }
 
