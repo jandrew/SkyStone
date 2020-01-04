@@ -17,13 +17,14 @@ import java.util.ArrayList;
 
 
 /**
- * simple example of using a Step that uses encoder and gyro input to drive to given field positions
- * assuming a "squirrely" drive (Meccanum wheels or X-drive) that can move in any direction independent
- * of the direction the bot is facing.
- * Created by phanau on 5/29/19
+ * a sample Skystone autonomous mode using
+   - VfSqPosIntDriveToStep: a Step that uses encoder and gyro input with occasional Vuforia updates to drive to various
+     field positions assuming a "squirrely" drive (Meccanum wheels or X-drive) that can move in any direction independent
+     of the direction the bot is facing.
+   - some other steps that detect the Skystone using Vuforia and compute positions to go to based on where that one is
+ * Created by phanau
  */
 
-// simple example sequence that tests encoder/gyro-based position integration to drive along a given path
 @Autonomous(name="Test: Skystone Auto Blue 1", group ="Test")
 //@Disabled
 public class SkystoneAutoBlue1 extends OpMode {
@@ -93,7 +94,9 @@ public class SkystoneAutoBlue1 extends OpMode {
 
     }
 
-    // Step: use Vuforia to locate the Skystone image and set the given position to where it is so we can go there
+    // Step: use Vuforia to locate the Skystone image and set the given position to where it is so we can go there ---
+    // depends on the fact that the target Position object is passed by reference, so we can update it to pass that
+    // information along to other steps that have been given the same object.
     class FindSkystoneStep extends AutoLib.LogTimeStep {
 
         Position mCurrPos;      // current position -- stone is relative to this
@@ -138,6 +141,7 @@ public class SkystoneAutoBlue1 extends OpMode {
     }
 
     // Step: log the given Position variable to the console so we can see if/when it changes due to Vuforia hit ...
+    // depends on the fact that the Position object is passed by reference, so if other steps update it we see those new values.
     class LogPosition extends AutoLib.LogTimeStep {
 
         OpMode mOpMode;
@@ -160,6 +164,8 @@ public class SkystoneAutoBlue1 extends OpMode {
 
     // a simple Step that computes a new Position (c) by adding an offset (b) to Position a.
     // this happens during sequence run-time in loop(), not when the sequence is constructed in init().
+    // depends on the fact that the Position objects a, b, and c are all passed by reference, so we see the latest
+    // values of a and b as set by other steps and can supply a new value of c that will be seen by other steps.
     class ComputePositionStep extends AutoLib.Step {
 
         Position mA, mB, mC;
@@ -185,7 +191,6 @@ public class SkystoneAutoBlue1 extends OpMode {
 
     AutoLib.Sequence mSequence;             // the root of the sequence tree
     boolean bDone;                          // true when the programmed sequence is done
-    boolean bSetup;                         // true when we're in "setup mode" where joysticks tweak parameters
     SensorLib.PID mPid;                     // PID controller for the sequence
     SensorLib.EncoderGyroPosInt mPosInt;    // Encoder/gyro-based position integrator to keep track of where we are
     RobotHardware rh;                       // standard hardware set for these tests
@@ -348,7 +353,9 @@ public class SkystoneAutoBlue1 extends OpMode {
 
     @Override public void start()
     {
-        /** Start tracking the data sets we care about. */
+        super.start();
+        
+        // Start tracking the data sets we care about.
         if (mVLib != null)
             mVLib.start();
     }
@@ -361,8 +368,11 @@ public class SkystoneAutoBlue1 extends OpMode {
             telemetry.addData("sequence finished", "");
     }
 
-    public void stop() {
+    public void stop()
+    {
         super.stop();
+
+        // Stop tracking the data sets we care about.
         if (mVLib != null)
             mVLib.stop();
     }
