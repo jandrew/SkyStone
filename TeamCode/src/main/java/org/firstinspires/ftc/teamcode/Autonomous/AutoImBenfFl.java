@@ -27,10 +27,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.Autonimous;
+package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode._Libs.Xdrive;
@@ -89,7 +90,7 @@ public class AutoImBenfFl extends LinearOpMode {
             hasLeftToe = true;
 
             //make left toe begin in upwards position
-            leftToe.setPosition(-.2);
+            leftToe.setPosition(0);
         }
 
         catch (IllegalArgumentException iax) {
@@ -103,7 +104,7 @@ public class AutoImBenfFl extends LinearOpMode {
             hasRightToe = true;
 
             //make right toe begin in upwards position
-            rightToe.setPosition(-.2);
+            rightToe.setPosition(0);
         }
         catch (IllegalArgumentException iax) {
             telemetry.addData("servo", "Servo isn't working you diddly dumbdumb ding fling");
@@ -164,10 +165,10 @@ public class AutoImBenfFl extends LinearOpMode {
 
         //Move toes to position
         if (hasLeftToe){
-            leftToe.setPosition(0.2);
+            leftToe.setPosition(0.1);
         }
         if (hasRightToe){
-            rightToe.setPosition(0.2);
+            rightToe.setPosition(0.7);
         }
         
         telemetry.addData("Path", "Complete");
