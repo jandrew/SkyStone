@@ -248,8 +248,8 @@ public class XDrive1Test extends OpMode {
 */
         dontTurn = false;
 
-        if(grabRotation > .5f){
-            grabRotation = .5f;
+        if(grabRotation > 1){
+            grabRotation = 1;
         }
         else if(grabRotation < 0){
             grabRotation = 0;

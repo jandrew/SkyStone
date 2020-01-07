@@ -109,8 +109,8 @@ public class SquirrelyDrive1 extends OpMode {
 
 		// compute left-side front and back wheel relative speeds needed to go in desired direction
 		AutoLib.MotorPowers mp = AutoLib.GetSquirrelyWheelMotorPowers(heading);
-		double rightFacing = mp.RightFacing();
-		double leftFacing = mp.LeftFacing();
+		double rightFacing = 0; //mp.RightFacing();
+		double leftFacing = 0; //mp.LeftFacing();
 
 		// power is the magnitude of the stick vector
 		double power = Math.sqrt(x*x + y*y);
