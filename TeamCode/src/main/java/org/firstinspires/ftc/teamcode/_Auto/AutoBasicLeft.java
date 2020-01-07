@@ -75,9 +75,11 @@ public class AutoBasicLeft extends OpMode {
         // add a Step (actually, a ConcurrentSequence under the covers) that
         //        // drives all four motors forward at half power for 2 seconds
         //        //mSequence.add(new AutoLib.MoveByTimeStep(mFr, mBr, mFl, mBl, 0.5, 2.0, false));
+        //goes forward
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.2, .2,  .2, .2,  2, true));
 
-        // Drives left?
-        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.2, -.2,  -.2, .2,  2.3, true));
+        // Drives left
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.2 , -.24,  -.2, .25,  2.3, true));
         //mSequence.add(new AutoLib.SideByEncoderStep(mFr, mBr, mFl, mBl, 0.5, 2, true));
         // create a second sequence that drives motors at different speeds
         // to turn left for 3 seconds, then stop all motors
