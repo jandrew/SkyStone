@@ -20,9 +20,9 @@ import org.firstinspires.ftc.teamcode._Libs.AutoLib;
 
 
 
-@Autonomous(name="AutoBasicLeft", group ="Test")
+@Autonomous(name="AutoParkBackLeft", group ="Test")
 //@Disabled
-public class AutoBasicLeft extends OpMode {
+public class AutoParkBackLeft extends OpMode {
 
     AutoLib.Sequence mSequence;     // the root of the sequence tree
     boolean bDone;                  // true when the programmed sequence is done
@@ -34,7 +34,7 @@ public class AutoBasicLeft extends OpMode {
     boolean debug = false;           // run in test/debug mode with dummy motors and data logging
     boolean haveEncoders = true;   // robot has Encoder-based motors
 
-    public AutoBasicLeft() {
+    public AutoParkBackLeft() {
     }
 
     public void init() {
@@ -75,11 +75,9 @@ public class AutoBasicLeft extends OpMode {
         // add a Step (actually, a ConcurrentSequence under the covers) that
         //        // drives all four motors forward at half power for 2 seconds
         //        //mSequence.add(new AutoLib.MoveByTimeStep(mFr, mBr, mFl, mBl, 0.5, 2.0, false));
-        //goes forward
-        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.2, .2,  .2, .2,  2, true));
 
-        // Drives left
-        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.2 , -.24,  -.2, .25,  2.3, true));
+        // Drives left?
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.2, -.2,  -.2, .2,  2.3, true));
         //mSequence.add(new AutoLib.SideByEncoderStep(mFr, mBr, mFl, mBl, 0.5, 2, true));
         // create a second sequence that drives motors at different speeds
         // to turn left for 3 seconds, then stop all motors

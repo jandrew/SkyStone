@@ -20,21 +20,21 @@ import org.firstinspires.ftc.teamcode._Libs.AutoLib;
 
 
 
-@Autonomous(name="AutoFoundationRedLeft", group ="Test")
+@Autonomous(name="AutoParkFrontLeft", group ="Test")
 //@Disabled
-public class AutoFoundationRedLeft extends OpMode {
+public class AutoParkFrontLeft extends OpMode {
 
     AutoLib.Sequence mSequence;     // the root of the sequence tree
     boolean bDone;                  // true when the programmed sequence is done
     boolean bFirst;                 // true first time loop() is called
 
-    DcMotor mFr, mBr, mFl, mBl, mArm;     // four drive motors (front right, back right, front left, back left)
+    DcMotor mFr, mBr, mFl, mBl;     // four drive motors (front right, back right, front left, back left)
     DcMotor mIo, mUd;               // two arm motors (in-out, up-down) OPTIONAL
 
     boolean debug = false;           // run in test/debug mode with dummy motors and data logging
     boolean haveEncoders = true;   // robot has Encoder-based motors
 
-    public AutoFoundationRedLeft() {
+    public AutoParkFrontLeft() {
     }
 
     public void init() {
@@ -57,13 +57,6 @@ public class AutoFoundationRedLeft extends OpMode {
         catch(IllegalArgumentException iax){
 
         }
-        try {
-            mArm = mf.getDcMotor("arm");
-            mArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        }
-        catch (IllegalArgumentException iax) {
-            mArm = null;
-        }
         // OPTIONAL arm motors
         try {
             mIo = mf.getDcMotor("io");
@@ -79,29 +72,28 @@ public class AutoFoundationRedLeft extends OpMode {
         // create the root Sequence for this autonomous OpMode
         mSequence = new AutoLib.LinearSequence();
 
-        // === MAIN DRIVE STUFF ===
-        // Drives forward
-        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.5, .5,  .5, .5,  1, true));
-        // drop arm
-        mSequence.add(new AutoLib.TimedMotorStep(mArm, 0.5, 1, true));
-        //Moving the founding fathers
-        mSequence.add(new AutoLib.FoundersMovement(mFr, mBr, mFl, mBl, mArm, -1, -1, -.7, -.7, 1, 3, true));
-        //rotate the  founding fathers
-        mSequence.add(new AutoLib.FoundersMovement(mFr, mBr, mFl, mBl, mArm, -1, -1, 1, 1, 1, 4, true));
-        //Raise arm
-        mSequence.add(new AutoLib.TimedMotorStep(mArm, -0.7, 1, true));
+        // add a Step (actually, a ConcurrentSequence under the covers) that
+        //        // drives all four motors forward at half power for 2 seconds
+        //        //mSequence.add(new AutoLib.MoveByTimeStep(mFr, mBr, mFl, mBl, 0.5, 2.0, false));
+        //goes forward
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.2, .2,  .2, .2,  2, true));
 
-        //Left, left, left, still left, left
-        //mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.5, -.5, -.5, .5,  1.5, true));
-        // forward
-        //mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.5, .5,  .5, .5,  1, true));
-        //to the right
-        //mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,-.5, .5, .5, -.5,  1.5, true));
-        //turn 45
-        //mSequence.add(new AutoLib.TurnByTimeStep(mFr, mBr, mFl, mBr, .5, -.5, .5, true));
-        //push it to the wall
-        //obviousally not done
+        // Drives left
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.2 , -.24,  -.2, .25,  2.3, true));
+        //mSequence.add(new AutoLib.SideByEncoderStep(mFr, mBr, mFl, mBl, 0.5, 2, true));
+        // create a second sequence that drives motors at different speeds
+        // to turn left for 3 seconds, then stop all motors
+        //mSequence.add(new AutoLib.TurnByTimeStep(mFr, mBr, mFl, mBl, 0.5, 0.2, 3.0, true));
 
+        // raise the arm using encoders while also extending it for 1 second
+        AutoLib.ConcurrentSequence cs1 = new AutoLib.ConcurrentSequence();
+        if (mUd != null && (debug || !haveEncoders))
+            cs1.add(new AutoLib.TimedMotorStep(mUd, 0.75, 1.0, true)); // we don't support encoders yet in debug mode
+        //else
+        //    cs1.add(new AutoLib.EncoderMotorStep(new EncoderMotor(mUd), 0.75, 1000, true));
+        if (mIo != null)
+            cs1.add(new AutoLib.TimedMotorStep(mIo, 0.5, 1.0, true));
+        mSequence.add(cs1);
 
         // start out not-done, first time
         bDone = false;
