@@ -81,26 +81,17 @@ public class AutoFoundationBlue extends OpMode {
 
         // === MAIN DRIVE STUFF ===
         // Drives forward
-        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.4, .4,  .4, .4,  1, true));
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.4, .4,  .4, .4,  1.1, true));
+        //to the left
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.4, -.4, -.4, .4,  .4, true));
         // drop arm
         mSequence.add(new AutoLib.TimedMotorStep(mArm, 0.5, 1, true));
         //Moving the founding fathers
-        mSequence.add(new AutoLib.FoundersMovement(mFr, mBr, mFl, mBl, mArm, -.5, -.5, -.7, -.7, 1, 3, true));
+        mSequence.add(new AutoLib.FoundersMovement(mFr, mBr, mFl, mBl, mArm, -.5, -.5, -.65, -.65, 1, 1.3, true));
         //rotate the  founding fathers
-        mSequence.add(new AutoLib.FoundersMovement(mFr, mBr, mFl, mBl, mArm, 1, 1, -1, -1, 1, 3, true));
+        mSequence.add(new AutoLib.FoundersMovement(mFr, mBr, mFl, mBl, mArm, .7, .7, -.8, -.8, 1, 1.5, true));
         //Raise arm
         mSequence.add(new AutoLib.TimedMotorStep(mArm, -0.7, 1, true));
-
-        //Left, left, left, still left, left
-        //mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.5, -.5, -.5, .5,  1.5, true));
-        // forward
-        //mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.5, .5,  .5, .5,  1, true));
-        //to the right
-        //mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,-.5, .5, .5, -.5,  1.5, true));
-        //turn 45
-        //mSequence.add(new AutoLib.TurnByTimeStep(mFr, mBr, mFl, mBr, .5, -.5, .5, true));
-        //push it to the wall
-        //obviousally not done
 
 
         // start out not-done, first time

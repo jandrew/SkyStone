@@ -55,27 +55,35 @@ public class XDrive1Test extends OpMode {
     DcMotor motorFrontLeft;
     DcMotor motorBackRight;
     DcMotor motorBackLeft;
-    DcMotor motorArm;
+    DcMotor motorBend;
+    DcMotor motorLift;
     Servo servoGrabber;
-    ColorSensor colorSensor;
+    Servo servoHookLeft;
+    Servo servoHookRight;
+    //ColorSensor colorSensor;
 
 
     boolean bDebugFR = false;
     boolean bDebugFL = false;
     boolean bDebugBR = false;
     boolean bDebugBL = false;
-    boolean bDebugArm = false;
+    boolean bDebugBend = false;
+    boolean bDebugLift = false;
     boolean bDebugGrabber = false;
-    boolean bDebugColor = false;
+    boolean bDebugHookLeft = false;
+    boolean bDebugHookRight = false;
+    //boolean bDebugColor = false;
     boolean dontTurn = false;
 
-    float armRotation = 0;
+    float bendRotation = 0;
+    float liftRotation = 0;
     float grabRotation = 0;
-
+    float hookRotation = 0;
+/*
     float ColorR = 0;
     float ColorG = 0;
     float ColorB = 0;
-
+*/
     /**
      * Constructor
      */
@@ -134,12 +142,20 @@ public class XDrive1Test extends OpMode {
             bDebugBL = true;
         }
         try{
-            motorArm = hardwareMap.dcMotor.get("arm");
-            motorArm.getCurrentPosition();
-            motorArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            motorBend = hardwareMap.dcMotor.get("bend");
+            motorBend.getCurrentPosition();
+            motorBend.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         catch(IllegalArgumentException iax){
-            bDebugArm = true;
+            bDebugBend = true;
+        }
+        try{
+            motorLift = hardwareMap.dcMotor.get("lift");
+            motorLift.getCurrentPosition();
+            motorLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
+        catch(IllegalArgumentException iax){
+            bDebugLift = true;
         }
 
         try{
@@ -150,11 +166,27 @@ public class XDrive1Test extends OpMode {
         }
 
         try{
+            servoHookLeft = hardwareMap.servo.get("hookLeft");
+        }
+        catch(IllegalArgumentException iax){
+            bDebugHookLeft = true;
+        }
+
+        try{
+            servoHookRight = hardwareMap.servo.get("hookRight");
+        }
+        catch(IllegalArgumentException iax){
+            bDebugHookRight = true;
+        }
+/*
+        try{
             colorSensor = hardwareMap.colorSensor.get("color");
         }
         catch(IllegalArgumentException iax){
             bDebugColor = true;
         }
+        *
+ */
     }
 
     /*
@@ -170,6 +202,7 @@ public class XDrive1Test extends OpMode {
         float x1 = gamepad1.left_stick_x;
         float y1 = -gamepad1.left_stick_y;
         float r1 = gamepad1.right_stick_x;
+
         float y2 = -gamepad2.left_stick_y;
         float y3 = -gamepad2.right_stick_y;
 
@@ -179,6 +212,7 @@ public class XDrive1Test extends OpMode {
         float rt = gamepad1.right_trigger;
 
         float lt2 = gamepad2.left_trigger;
+        float lt3 = gamepad2.right_trigger;
 
 
         // clip the right/left values so that the values never exceed +/- 1
@@ -201,11 +235,25 @@ public class XDrive1Test extends OpMode {
         float fl = (y1+x1+r1);
         float bl = (y1-x1)+r1;
 
-        float armRotationIncrement = y3;
-        armRotation += armRotationIncrement;
+        float bendRotationIncrement = y2;
+        bendRotation += bendRotationIncrement;
 
-        float grabRotationIncrement = y2/10;
-        grabRotation += grabRotationIncrement;
+        float liftRotationIncrement = y3;
+        liftRotation += liftRotationIncrement;
+
+        if(gamepad2.x){
+            grabRotation = 1;
+        }
+        if(gamepad2.y){
+            grabRotation = 0;
+        }
+
+        if(gamepad2.a){
+            hookRotation = 1;
+        }
+        if(gamepad2.b){
+            hookRotation = 0;
+        }
 
 
         if(Math.abs(fr) > 1 && Math.abs(fr) >= Math.abs(br) && Math.abs(fr) >= Math.abs(fl) && Math.abs(fr) >= Math.abs(bl)){
@@ -233,17 +281,17 @@ public class XDrive1Test extends OpMode {
             bl = bl / Math.abs(bl);
         }
 /*
-    if(armRotation >= 10){
-       armRotation = 10;
-       dontTurn = true;
-    }
-    else if(armRotation <= 0){
-       armRotation = 0;
-       dontTurn = true;
-    }
-    else{
-       dontTurn = false;
-    }
+   if(liftRotation >= 10){
+      liftRotation = 10;
+      dontTurn = true;
+   }
+   else if(Rotation <= 0){
+      liftRotation = 0;
+      dontTurn = true;
+   }
+   else{
+      dontTurn = false;
+   }
 
 */
         dontTurn = false;
@@ -253,6 +301,13 @@ public class XDrive1Test extends OpMode {
         }
         else if(grabRotation < 0){
             grabRotation = 0;
+        }
+
+        if(liftRotation > 1){
+            liftRotation = 1;
+        }
+        else if(liftRotation < 0){
+            liftRotation = 0;
         }
 
         fr /= 2;
@@ -270,8 +325,11 @@ public class XDrive1Test extends OpMode {
         fl *= (1+rt);
         bl *= (1+rt);
 
-        float arm = y3;
-        arm *= (1-(lt2/2));
+        float bend = y2;
+        bend *= (1-(lt2/2));
+
+        float lift = y3;
+        lift *= (1-(lt3/2));
 
 
         //Writes values for motors and servos IF the motors/servos passed the try catch
@@ -287,17 +345,26 @@ public class XDrive1Test extends OpMode {
         if(!bDebugBL){
             motorBackLeft.setPower(bl);
         }
-        if(!bDebugArm){
-            motorArm.setPower(arm);
+        if(!bDebugBend){
+            motorBend.setPower(bend);
+        }
+        if(!bDebugLift){
+            motorLift.setPower(lift);
         }
         if(!bDebugGrabber){
             servoGrabber.setPosition(grabRotation);
         }
+        if(!bDebugHookLeft){
+            servoHookLeft.setPosition(hookRotation);
+        }
+        if(!bDebugHookRight){
+            servoHookLeft.setPosition(hookRotation);
+        }/*
         if(!bDebugColor){
             ColorR = colorSensor.red();
             ColorG = colorSensor.green();
             ColorB = colorSensor.blue();
-        }
+        }*/
 
         /*
          * Send telemetry data back to driver station. Note that if we are using
@@ -345,19 +412,31 @@ public class XDrive1Test extends OpMode {
         else{
             telemetry.addData("grabber rotation", String.format("not working"));
         }
-        if(!bDebugArm){
-            telemetry.addData("arm rotation", String.format("%.2f",armRotation));
+        if(!bDebugHookLeft && !bDebugHookRight){
+            telemetry.addData("hook rotation", String.format("%.2f",hookRotation));
         }
         else{
-            telemetry.addData("arm rotation", String.format("&.2f",grabRotation));
+            telemetry.addData("hook rotation", String.format("not working"));
+        }
+        if(!bDebugBend){
+            telemetry.addData("bend rotation", String.format("%.2f",bendRotation));
+        }
+        else{
+            telemetry.addData("bend rotation", String.format("%.2f",bendRotation));
+        }
+        if(!bDebugLift){
+            telemetry.addData("lift rotation", String.format("%.2f",liftRotation));
+        }
+        else{
+            telemetry.addData("lift rotation", String.format("%.2f",liftRotation));
         }
         telemetry.addData("gamepad2", gamepad2);
-
+/*
         if(!bDebugColor){
             telemetry.addData("Red: ", String.format("%.2f",ColorR));
             telemetry.addData("Green: ", String.format("%.2f",ColorG));
             telemetry.addData("Blue: ", String.format("%.2f",ColorB));
-        }
+        }*/
     }
 
     /*
@@ -382,6 +461,8 @@ public class XDrive1Test extends OpMode {
 }
 
 //Bruh
+
+
 
 
 
