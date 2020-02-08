@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode._Libs.AutoLib;
 
@@ -30,6 +31,7 @@ public class AutoFoundationRed extends OpMode {
 
     DcMotor mFr, mBr, mFl, mBl, mArm;     // four drive motors (front right, back right, front left, back left)
     DcMotor mIo, mUd;               // two arm motors (in-out, up-down) OPTIONAL
+    Servo mS1, mS2;
 
     boolean debug = false;           // run in test/debug mode with dummy motors and data logging
     boolean haveEncoders = true;   // robot has Encoder-based motors
@@ -80,16 +82,20 @@ public class AutoFoundationRed extends OpMode {
         mSequence = new AutoLib.LinearSequence();
 
         // === MAIN DRIVE STUFF ===
+        // Set start positionyu
+        mSequence.add(new AutoLib.DualServoStep(mS1, mS2, 0));
         // Drives forward
         mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.4, .4,  .4, .4,  1, true));
+        //to the right
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,-.4, .4, .4, -.4,  .5, true));
         // drop arm
-        mSequence.add(new AutoLib.TimedMotorStep(mArm, 0.5, 1, true));
+        mSequence.add(new AutoLib.DualServoStep(mS1, mS2, 1));
         //Moving the founding fathers
-        mSequence.add(new AutoLib.FoundersMovement(mFr, mBr, mFl, mBl, mArm, -.7, -.7, -.5, -.5, 1, 3, true));
+        mSequence.add(new AutoLib.FoundersMovement(mFr, mBr, mFl, mBl, mArm, -.65, -.65, -.5, -.5, 1, 1.1, true));
         //rotate the  founding fathers
-        mSequence.add(new AutoLib.FoundersMovement(mFr, mBr, mFl, mBl, mArm, -1, -1, 1, 1, 1, 3, true));
-        //Raise arm
-        mSequence.add(new AutoLib.TimedMotorStep(mArm, -0.7, 1, true));
+        mSequence.add(new AutoLib.FoundersMovement(mFr, mBr, mFl, mBl, mArm, -1, -1, 1, 1, 1, 1.3, true));
+        // drop arm
+        mSequence.add(new AutoLib.DualServoStep(mS1, mS2, 0));
 
         //Left, left, left, still left, left
         //mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.5, -.5, -.5, .5,  1.5, true));

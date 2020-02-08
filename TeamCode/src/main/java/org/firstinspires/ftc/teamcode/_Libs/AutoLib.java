@@ -1460,7 +1460,25 @@ public class AutoLib {
                 this.add(new TimedMotorStep(bl, blP, seconds, stop));
         }
     }
+    //move multiple servos, anywhere from 2 servos to 2 servos
+    static public class DualServoStep extends Step {
+        Servo mServo;
+        Servo mServo2;
+        double mPosition;          // target position of servo
+        Timer mTimer;              // Timer for this Step
+        double mFullRangeTime;     // time (sec) it takes to move servo from 0..1 or v.v.
 
+        // this constructor assumes client sequence is dealing with waiting for the servo to get where it's going
+        public DualServoStep(Servo servo, Servo servo2, double position) {
+            mServo = servo;
+            mServo2 = servo2;
+            mPosition = position;
+            mTimer = null;
+            mFullRangeTime = 0.0;   // servo is assumed to be instantaneous if not told otherwise
+            mServo.setPosition(mPosition);
+            mServo2.setPosition(mPosition);
+        }
+    }
     //for moving big things
     static public class FoundersMovement extends ConcurrentSequence {
 

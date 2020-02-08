@@ -7,10 +7,9 @@ package org.firstinspires.ftc.teamcode._Auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-
 
 import org.firstinspires.ftc.teamcode._Libs.AutoLib;
 
@@ -22,9 +21,9 @@ import org.firstinspires.ftc.teamcode._Libs.AutoLib;
 
 
 
-@Autonomous(name="AutoBlockRedRight", group ="Test")
+@Autonomous(name="AutoBlockBlueLeft", group ="Test")
 //@Disabled
-public class AutoBlockRedRight extends OpMode {
+public class AutoBlockBlueLeft extends OpMode {
 
     AutoLib.Sequence mSequence;     // the root of the sequence tree
     boolean bDone;                  // true when the programmed sequence is done
@@ -44,7 +43,7 @@ public class AutoBlockRedRight extends OpMode {
     float powa = 0;
     float posi = 0;
 
-    public AutoBlockRedRight() {
+    public AutoBlockBlueLeft() {
     }
 
     public void init() {
@@ -100,35 +99,35 @@ public class AutoBlockRedRight extends OpMode {
 
         // === MAIN DRIVE STUFF ===
 
-        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.2, -.2,  -.2, .2,  2, true));
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,-.2, .2,  .2, -.2,  2, true));
 
         // Drives forward to second block
-        mSequence.add(new AutoLib.MoveByTimeStep(mFr, mBr, mFl, mBl, .2, 2.85, true));
+        mSequence.add(new AutoLib.MoveByTimeStep(mFr, mBr, mFl, mBl, .2, 3.2, true));
 
-        mSequence.add(new AutoLib.TimedMotorStep(mArm,0,2,true));
+        mSequence.add(new AutoLib.TimedMotorStep(mBl,0,2,true));
 
         //moves side to third block
-        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,-.21, .2,  .21, -.2,  .85, true));
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.2, -.21,  -.2, .21,  .9, true));
 
-        mSequence.add(new AutoLib.TimedMotorStep(mArm,0,2,true));
+        mSequence.add(new AutoLib.TimedMotorStep(mBl,0,2,true));
 
         //moves side to fourth block
-        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,-.2, .2,  .2, -.2,  .85, true));
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.2, -.22,  -.2, .22,  .9, true));
 
-        mSequence.add(new AutoLib.TimedMotorStep(mArm,0,2,true));
+        mSequence.add(new AutoLib.TimedMotorStep(mBl,0,2,true));
 
         //moves side to fifth block
-        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,-.2, .2,  .2, -.2,  .85, true));
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.2, -.2,  -.2, .2,  .9, true));
 
-        mSequence.add(new AutoLib.TimedMotorStep(mArm,0,2,true));
+        mSequence.add(new AutoLib.TimedMotorStep(mBl,0,2,true));
 
         //moves side to sixth block
-        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,-.2, .2,  .2, -.2,  .85, true));
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.2, -.2,  -.2, .2,  .9, true));
 
-        mSequence.add(new AutoLib.TimedMotorStep(mArm,0,2,true));
+        mSequence.add(new AutoLib.TimedMotorStep(mBl,0,2,true));
 
         // drives left to foundation
-        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,-.5, .5,  .5, -.5,  2, true));
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.5, -.5,  -.5, .5,  2, true));
 
         // rotate left
         //mSequence.add(new AutoLib.TurnByTimeStep(mFr, mBr, mFl, mBl, -.2, .2, .8,  true));
@@ -137,8 +136,9 @@ public class AutoBlockRedRight extends OpMode {
         mSequence.add(new AutoLib.TimedMotorStep(mArm,.75, 2, true));
         mSequence.add(new AutoLib.TimedMotorStep(mArm,-.75, 2, true));
 
-        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,.5, -.5,  -.5, .5,  1, true));
+        mSequence.add(new AutoLib.SideToSide(mFr, mBr, mFl, mBl,-.5, .5,  .5, -.5,  1, true));
 
+        mSequence.add(new AutoLib.MoveByTimeStep(mFr, mBr, mFl, mBl, .2, 1, true));
         // start out not-done, first time
         bDone = false;
         bFirst = true;
@@ -148,20 +148,20 @@ public class AutoBlockRedRight extends OpMode {
     public void loop() {
 
 
-        if((mColorSensor.red() > 24 || this.getRuntime() < 5) && startCount == false){ // if yellow OR time is in the first 5 seconds
+        if((mColorSensor.red() > 24 || this.getRuntime() < 7) && startCount == false){ // if yellow OR time is in the first 5 seconds
             //doesn't use arm
         }
         else if(pass && this.getRuntime() >= count+1 && this.getRuntime() <= count+2){
-            posi = 1;
-            powa = -.66f;
+            powa = -1f;
         }
-        else if(this.getRuntime() > count+1){ // if count has passed one second after seeing a black block AND it hasn't passed a block yet
+        else if(this.getRuntime() > count+.5){ // if count has passed one second after seeing a black block AND it hasn't passed a block yet
             pass = true;
+            posi = 1;
         }
         else if(mColorSensor.red() <= 24 && !pass && this.getRuntime() <= 20){ // if black AND hasn't passed AND time is past 5 seconds AND time is less than last 10 seconds
             posi = 0;
 
-            powa = 1;
+            powa = .66f;
             if(startCount == false) {
                 count = this.getRuntime();
                 startCount = true;
@@ -187,6 +187,10 @@ public class AutoBlockRedRight extends OpMode {
 
         telemetry.addData("color", mColorSensor.red());
         telemetry.addData("pass?", pass);
+    }
+
+    public void stop() {
+        telemetry.addData("stop() called", "");
     }
 }
 //2ft & 3in
