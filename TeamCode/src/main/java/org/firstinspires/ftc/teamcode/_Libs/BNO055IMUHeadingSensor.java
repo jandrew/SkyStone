@@ -183,7 +183,7 @@ public class BNO055IMUHeadingSensor implements HeadingSensor {
     // byte AXIS_MAP_SIGN_BYTE = 0x7;       // -X -Y -Z
     // 9: upright longitudinally upside down (!) with R nearest the front of vehicle:
     // byte AXIS_MAP_CONFIG_BYTE = 0x6;     // Z=X Y=-Y X=Z
-    // byte AXIS_MAP_SIGN_BYTE = 0x4;       // -X Y Z     ?? if 0x7 -X -Y -Z, X and Y are LH rotations
+    // byte AXIS_MAP_SIGN_BYTE = 0x4;       // -X Y Z     ?? inferred from 5 with YZ flipped
 
     private void setRevOrientation(BNO055IMU imu, int orientation) {
 
