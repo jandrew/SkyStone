@@ -42,7 +42,7 @@ public class RevGyroTestOp extends OpMode {
 
         // use controller input button X to cycle through various orientations
         if (mButton.process(gamepad1.x))
-            mGyro.setOrientation(mButton.value());
+            mGyro.init(mButton.value());
 
         // use controller buttons A and B to increase/decrease degrees per turn correction
         if (gamepad1.a)
