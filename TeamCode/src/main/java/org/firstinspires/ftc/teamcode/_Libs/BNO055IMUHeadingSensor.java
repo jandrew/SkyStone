@@ -151,9 +151,9 @@ public class BNO055IMUHeadingSensor implements HeadingSensor {
     // we will use the convention PITCH = +X, ROLL = +Y, YAW(Heading) = +Z
     // which corresponds to mounting the REV hub laying flat on the vehicle as shown above (orientation 1 below).
 
-    // other orientations need these settings:                                      test entries
-    private byte[] config = { 0x24, 0x24, 0x21, 0x21, 0x6,  0x6, 0x9, 0x9, 0x21,  /* 0x6,0x6,0x6,0x6,0x6,0x6,0x6,0x6 */ };
-    private byte[] sign   = { 0x0,  0x6,  0x4,  0x2,  0x1,  0x7, 0x5, 0x3, 0x7,   /* 0x0,0x1,0x2,0x3,0x4,0x5,0x6,0x7 */ };
+    // other orientations need these settings:                                           test entries
+    private byte[] config = { 0x24, 0x24, 0x21, 0x21, 0x6,  0x6, 0x9, 0x9, 0x21, 0x6, /* 0x6,0x6,0x6,0x6,0x6,0x6,0x6,0x6 */ };
+    private byte[] sign   = { 0x0,  0x6,  0x4,  0x2,  0x1,  0x7, 0x5, 0x3, 0x7,  0x4, /* 0x0,0x1,0x2,0x3,0x4,0x5,0x6,0x7 */ };
     // 0: flat with top of REV label on right side of vehicle:
     // byte AXIS_MAP_CONFIG_BYTE = 0x24;    // Z=Z Y=Y X=X
     // byte AXIS_MAP_SIGN_BYTE = 0x0;       // X Y Z
@@ -181,6 +181,9 @@ public class BNO055IMUHeadingSensor implements HeadingSensor {
     // 8: flat face DOWN with top of REV label nearest the back of vehicle:
     // byte AXIS_MAP_CONFIG_BYTE = 0x21;    // Z=-Z Y=-X X=-Y
     // byte AXIS_MAP_SIGN_BYTE = 0x7;       // -X -Y -Z
+    // 9: upright longitudinally upside down (!) with R nearest the front of vehicle:
+    // byte AXIS_MAP_CONFIG_BYTE = 0x6;     // Z=X Y=-Y X=Z
+    // byte AXIS_MAP_SIGN_BYTE = 0x4;       // -X Y Z     ?? if 0x7 -X -Y -Z, X and Y are LH rotations
 
     private void setRevOrientation(BNO055IMU imu, int orientation) {
 
