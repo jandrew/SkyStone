@@ -60,7 +60,7 @@ public class XDrive1Test extends OpMode {
     Servo servoGrabber;
     Servo servoHookLeft;
     Servo servoHookRight;
-    //ColorSensor colorSensor;
+    ColorSensor colorSensor;
 
 
     boolean bDebugFR = false;
@@ -72,18 +72,18 @@ public class XDrive1Test extends OpMode {
     boolean bDebugGrabber = false;
     boolean bDebugHookLeft = false;
     boolean bDebugHookRight = false;
-    //boolean bDebugColor = false;
+    boolean bDebugColor = false;
     boolean dontTurn = false;
 
     float bendRotation = 0;
     float liftRotation = 0;
     float grabRotation = 0;
     float hookRotation = 0;
-/*
+
     float ColorR = 0;
     float ColorG = 0;
     float ColorB = 0;
-*/
+
     /**
      * Constructor
      */
@@ -178,15 +178,13 @@ public class XDrive1Test extends OpMode {
         catch(IllegalArgumentException iax){
             bDebugHookRight = true;
         }
-/*
+
         try{
             colorSensor = hardwareMap.colorSensor.get("color");
         }
         catch(IllegalArgumentException iax){
             bDebugColor = true;
         }
-        *
- */
     }
 
     /*
@@ -359,12 +357,12 @@ public class XDrive1Test extends OpMode {
         }
         if(!bDebugHookRight){
             servoHookLeft.setPosition(hookRotation);
-        }/*
+        }
         if(!bDebugColor){
             ColorR = colorSensor.red();
             ColorG = colorSensor.green();
             ColorB = colorSensor.blue();
-        }*/
+        }
 
         /*
          * Send telemetry data back to driver station. Note that if we are using
@@ -431,12 +429,12 @@ public class XDrive1Test extends OpMode {
             telemetry.addData("lift rotation", String.format("%.2f",liftRotation));
         }
         telemetry.addData("gamepad2", gamepad2);
-/*
+
         if(!bDebugColor){
             telemetry.addData("Red: ", String.format("%.2f",ColorR));
             telemetry.addData("Green: ", String.format("%.2f",ColorG));
             telemetry.addData("Blue: ", String.format("%.2f",ColorB));
-        }*/
+        }
     }
 
     /*

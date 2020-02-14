@@ -1460,6 +1460,15 @@ public class AutoLib {
                 this.add(new TimedMotorStep(bl, blP, seconds, stop));
         }
     }
+    //single servo
+    static public class dropIt extends ConcurrentSequence {
+
+        public dropIt(DcMotor arm, double aP, double seconds, boolean stop)
+        {
+            if (arm != null)
+                this.add(new TimedMotorStep(arm, aP, seconds, stop));
+        }
+    }
     //move multiple servos, anywhere from 2 servos to 2 servos
     static public class DualServoStep extends Step {
         Servo mServo;
