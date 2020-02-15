@@ -75,6 +75,7 @@ public class XDrive1Test extends OpMode {
     boolean bDebugColor = false;
     boolean dontTurn = false;
 
+
     float bendRotation = 0;
     float liftRotation = 0;
     float grabRotation = 0;
@@ -143,8 +144,11 @@ public class XDrive1Test extends OpMode {
         }
         try{
             motorBend = hardwareMap.dcMotor.get("bend");
-            motorBend.getCurrentPosition();
+            bendRotation = motorBend.getCurrentPosition();
             motorBend.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            motorBend.setTargetPosition((int)bendRotation);
+            motorBend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorBend.setPower(1.0);
         }
         catch(IllegalArgumentException iax){
             bDebugBend = true;
@@ -344,7 +348,7 @@ public class XDrive1Test extends OpMode {
             motorBackLeft.setPower(bl);
         }
         if(!bDebugBend){
-            motorBend.setPower(bend);
+            motorBend.setTargetPosition((int)bendRotation);
         }
         if(!bDebugLift){
             motorLift.setPower(lift);
@@ -418,15 +422,16 @@ public class XDrive1Test extends OpMode {
         }
         if(!bDebugBend){
             telemetry.addData("bend rotation", String.format("%.2f",bendRotation));
+            telemetry.addData("bend count", String.format("%d",motorBend.getCurrentPosition()));
         }
         else{
-            telemetry.addData("bend rotation", String.format("%.2f",bendRotation));
+            telemetry.addData("bend rotation", String.format("not working"));
         }
         if(!bDebugLift){
             telemetry.addData("lift rotation", String.format("%.2f",liftRotation));
         }
         else{
-            telemetry.addData("lift rotation", String.format("%.2f",liftRotation));
+            telemetry.addData("lift rotation", String.format("not working"));
         }
         telemetry.addData("gamepad2", gamepad2);
 
