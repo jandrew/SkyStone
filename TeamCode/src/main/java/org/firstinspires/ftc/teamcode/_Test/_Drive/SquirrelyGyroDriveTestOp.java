@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode._Libs.SensorLib;
  */
 
 
-// simple example sequence that tests time based "squirrely wheel" drive steps to drive along a prescribed path
+// simple example sequence that tests "squirrely wheel" drive steps to drive along a prescribed path
 // while stabilizing robot orientation with gyro inputs
 @Autonomous(name="Test: Squirrely Gyro Drive Test 1", group ="Test")
 //@Disabled
@@ -40,29 +40,60 @@ public class SquirrelyGyroDriveTestOp extends OpMode {
         mSequence = new AutoLib.LinearSequence();
 
         // add a bunch of timed "legs" to the sequence - use Gyro heading convention of positive degrees CCW from initial heading
-        float leg = 3.0f;  // time along each leg of the polygon
         SensorLib.PID pid = null;         // use default PID provided by the step
 
-        // drive a square while maintaining constant orientation (0)
-        mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this, -90, 0, rh.mIMU, pid, rh.mMotors, power, leg/2, false));
-        mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this,   0, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
-        mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this,  90, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
-        mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this, 180, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
-        mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this, 270, 0, rh.mIMU, pid, rh.mMotors, power, leg/2, false));
+        if (true) {         // true: use Timed drive steps
+            float leg = 3.0f;  // time along each leg of the polygon
 
-        // ... and then a diamond
-        mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this, -45, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
-        mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this,  45, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
-        mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this, 135, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
-        mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this, 225, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
+            // drive a square while maintaining constant orientation (0)
+            mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this, -90, 0, rh.mIMU, pid, rh.mMotors, power, leg / 2, false));
+            mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this, 0, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
+            mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this, 90, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
+            mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this, 180, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
+            mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this, 270, 0, rh.mIMU, pid, rh.mMotors, power, leg / 2, false));
 
-        // ... and then sort of a polygonal circle
-        int n = 60;     // number of sides
-        for (int i=0; i<=n; i++) {
-            float heading = 360*i/n - 90;
-            boolean stop = (i==n);
-            int t = (i==0 || i==n) ? 2 : 4;
-            mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this, heading, 0, rh.mIMU, pid, rh.mMotors, power, t*leg/n, stop));
+            // ... and then a diamond
+            mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this, -45, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
+            mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this, 45, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
+            mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this, 135, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
+            mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this, 225, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
+
+            // ... and then sort of a polygonal circle
+            int n = 60;     // number of sides
+            for (int i = 0; i <= n; i++) {
+                float heading = 360 * i / n - 90;
+                boolean stop = (i == n);
+                int t = (i == 0 || i == n) ? 2 : 4;
+                mSequence.add(new AutoLib.SquirrelyGyroTimedDriveStep(this, heading, 0, rh.mIMU, pid, rh.mMotors, power, t * leg / n, stop));
+            }
+
+        }
+
+        else {         // false: use Counted drive steps
+            int leg = 28*20*10; // encoder count along each leg of the polygon
+
+            // drive a square while maintaining constant orientation (0)
+            mSequence.add(new AutoLib.SquirrelyGyroCountedDriveStep(this, -90, 0, rh.mIMU, pid, rh.mMotors, power, leg / 2, false));
+            mSequence.add(new AutoLib.SquirrelyGyroCountedDriveStep(this, 0, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
+            mSequence.add(new AutoLib.SquirrelyGyroCountedDriveStep(this, 90, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
+            mSequence.add(new AutoLib.SquirrelyGyroCountedDriveStep(this, 180, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
+            mSequence.add(new AutoLib.SquirrelyGyroCountedDriveStep(this, 270, 0, rh.mIMU, pid, rh.mMotors, power, leg / 2, false));
+
+            // ... and then a diamond
+            mSequence.add(new AutoLib.SquirrelyGyroCountedDriveStep(this, -45, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
+            mSequence.add(new AutoLib.SquirrelyGyroCountedDriveStep(this, 45, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
+            mSequence.add(new AutoLib.SquirrelyGyroCountedDriveStep(this, 135, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
+            mSequence.add(new AutoLib.SquirrelyGyroCountedDriveStep(this, 225, 0, rh.mIMU, pid, rh.mMotors, power, leg, false));
+
+            // ... and then sort of a polygonal circle
+            int n = 60;     // number of sides
+            for (int i = 0; i <= n; i++) {
+                float heading = 360 * i / n - 90;
+                boolean stop = (i == n);
+                int t = (i == 0 || i == n) ? 2 : 4;
+                mSequence.add(new AutoLib.SquirrelyGyroCountedDriveStep(this, heading, 0, rh.mIMU, pid, rh.mMotors, power, t * leg / n, stop));
+            }
+
         }
 
         // start out not-done
