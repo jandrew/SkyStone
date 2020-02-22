@@ -73,12 +73,11 @@ public class SquirrelyDrive2 extends OpMode {
 		rh.init(this);
 
 		// create Encoder/gyro-based PositionIntegrator to keep track of where we are on the field
-		// use constructor that defaults the wheel type to Normal (not Mecanum or X-Drive)
-		int countsPerRev = 28*20;		// for 20:1 gearbox motor @ 28 counts/motorRev
-		double wheelDiam = 4.0;		    // wheel diameter (in)
+		int countsPerRev = 753;		// for GOBILDA (actually 753.2)
+		double wheelDiam = 4.7;		    // wheel diameter (in)
 		Position initialPosn = new Position(DistanceUnit.INCH, 0.0, 0.0, 0.0, 0);  // example starting position: at origin of field
-		SensorLib.EncoderGyroPosInt.DriveType dt = //SensorLib.EncoderGyroPosInt.DriveType.XDRIVE;
-				SensorLib.EncoderGyroPosInt.DriveType.MECANUM;
+		SensorLib.EncoderGyroPosInt.DriveType dt = SensorLib.EncoderGyroPosInt.DriveType.XDRIVE;
+				//SensorLib.EncoderGyroPosInt.DriveType.MECANUM;
 		mPosInt = new SensorLib.EncoderGyroPosInt(dt,this, rh.mIMU, rh.mMotors, countsPerRev, wheelDiam, initialPosn);
 	}
 

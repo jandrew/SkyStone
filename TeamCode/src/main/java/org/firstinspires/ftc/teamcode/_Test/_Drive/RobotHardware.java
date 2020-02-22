@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode._Test._Drive;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode._Libs.AutoLib;
 import org.firstinspires.ftc.teamcode._Libs.BNO055IMUHeadingSensor;
@@ -12,6 +13,7 @@ public class RobotHardware {
 
     public DcMotor[] mMotors;
     public BNO055IMUHeadingSensor mIMU;
+    public Servo mServo;
 
     public boolean init(OpMode opmode) {
         boolean bOkay = true;
@@ -35,9 +37,11 @@ public class RobotHardware {
 
             // get hardware IMU and wrap gyro in HeadingSensor object usable below
             mIMU = new BNO055IMUHeadingSensor(opmode.hardwareMap.get(BNO055IMU.class, "imu"));
-            mIMU.init(7);  // orientation of REV hub in my ratbot
-            mIMU.setDegreesPerTurn(355.0f);  // appears that's what my IMU does ... set this for your IMU
+            mIMU.init(0);  // orientation of REV hub in my ratbot
+            //mIMU.setDegreesPerTurn(355.0f);  // appears that's what my IMU does ... set this for your IMU
 
+            // get grabber servo so we can test it
+            mServo = mf.getServo("grabServo");
         }
         catch (IllegalArgumentException iax) {
             bOkay = false;

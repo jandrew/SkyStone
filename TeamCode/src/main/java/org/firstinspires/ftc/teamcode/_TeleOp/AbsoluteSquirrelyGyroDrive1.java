@@ -74,6 +74,8 @@ public class AbsoluteSquirrelyGyroDrive1 extends OpMode {
 
 	SensorLib.EncoderGyroPosInt mPosInt;	// position integrator
 
+    float mServoPosition = 0;
+
 	/**
 	 * Constructor
 	 */
@@ -114,10 +116,9 @@ public class AbsoluteSquirrelyGyroDrive1 extends OpMode {
 		// create a Step that we will use in teleop mode
 		mStep = new AutoLib.SquirrelyGyroTimedDriveStep(this, 0, 0, rh.mIMU, pid, rh.mMotors, 0, 10000, false);
 
-		// create Encoder/gyro-based PositionIntegrator to keep track of where we are on the field
-		// use constructor that defaults the wheel type to Normal (not Mecanum or X-Drive)
-		int countsPerRev = 28*20;		// for 20:1 gearbox motor @ 28 counts/motorRev
-		double wheelDiam = 4.0;		    // wheel diameter (in)
+        // create Encoder/gyro-based PositionIntegrator to keep track of where we are on the field
+        int countsPerRev = 753;		    // for GOBILDA - actually 753.2
+        double wheelDiam = 4.7;		    // wheel diameter (in)
 		Position initialPosn = new Position(DistanceUnit.INCH, 0.0, 0.0, 0.0, 0);  // example starting position: at origin of field
 		SensorLib.EncoderGyroPosInt.DriveType dt = //SensorLib.EncoderGyroPosInt.DriveType.XDRIVE;
 				SensorLib.EncoderGyroPosInt.DriveType.MECANUM;
@@ -198,7 +199,22 @@ public class AbsoluteSquirrelyGyroDrive1 extends OpMode {
 
 		// run the control step
 		mStep.loop();
-	}
+
+        // test the grabber servo
+        if (rh.mServo != null) {
+            if (gamepad1.a)
+                mServoPosition += 0.01f;
+            if (gamepad1.b)
+                mServoPosition -= 0.01f;
+            if (gamepad1.x)
+                mServoPosition = 0.45f;     // open
+            if (gamepad1.y)
+                mServoPosition = 0.78f;     // closed
+            rh.mServo.setPosition(mServoPosition);
+        }
+
+        telemetry.addData("servo position", mServoPosition);
+    }
 
 	/*
 	 * Code to run when the op mode is first disabled goes here

@@ -235,18 +235,18 @@ public class SkystoneAutoBlue1 extends OpMode {
         mPid = new SensorLib.PID(Kp, Ki, Kd, KiCutoff);    // make the object that implements PID control algorithm
 
         // create Encoder/gyro-based PositionIntegrator to keep track of where we are on the field
-        int countsPerRev = 28*20;		// for 20:1 gearbox motor @ 28 counts/motorRev
-        double wheelDiam = 4.0;		    // wheel diameter (in)
+        int countsPerRev = 753;		// for GOBILDA - actually 753.2
+        double wheelDiam = 4.7;		    // wheel diameter (in)
 
         // initial position and orientation of bot is along Blue wall near the red loading zone facing the Red side
         rh.mIMU.setHeadingOffset(180);  // initially bot is facing in (Vuforia) field -Y direction, whereas, for us, +Y is bearing zero
         Position initialPosn = new Position(DistanceUnit.INCH, -36.0, 72.0-ROBOT_LENGTH/2, 0.0, 0); // at the BLUE wall
-        SensorLib.EncoderGyroPosInt.DriveType dt = //SensorLib.EncoderGyroPosInt.DriveType.XDRIVE;
-                        SensorLib.EncoderGyroPosInt.DriveType.MECANUM;
+        SensorLib.EncoderGyroPosInt.DriveType dt = SensorLib.EncoderGyroPosInt.DriveType.XDRIVE;
+                        //SensorLib.EncoderGyroPosInt.DriveType.MECANUM;
         mPosInt = new SensorLib.EncoderGyroPosInt(dt,this, rh.mIMU, rh.mMotors, countsPerRev, wheelDiam, initialPosn);
 
         // (option) Start up Vuforia
-        final boolean bUseVuforia = true;
+        final boolean bUseVuforia = false;
         if (bUseVuforia) {
             mVLib = new VuforiaLib_SkyStone();
             mVLib.init(this);     // pass it this OpMode (so it can do telemetry output)
