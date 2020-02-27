@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode._Libs.AutoLib;
 import org.firstinspires.ftc.teamcode._Libs.TestHardware;
+import org.firstinspires.ftc.teamcode._Test._Drive.RobotHardware;
 
 /**
  * Created by phanau on 12/7/18.
@@ -24,6 +25,7 @@ class UntilStep extends AutoLib.Step {
 //@Disabled
 public class TestServoSteps extends OpMode {
 
+    RobotHardware rh;
     Servo mMotor;
     AutoLib.Sequence mSequence;     // the root of the sequence tree
     boolean bDone;                  // true when the programmed sequence is done
@@ -32,17 +34,13 @@ public class TestServoSteps extends OpMode {
     }
 
     public void init() {
+        
         // get hardware
-        TestHardware.HardwareFactory mf = null;
-        final boolean debug = false;
-        if (debug)
-            mf = new TestHardware.TestHardwareFactory(this);
-        else
-            mf = new TestHardware.RealHardwareFactory(this);
+        rh = new RobotHardware();
+        rh.init(this);
 
-        // get the servo: depending on the factory we created above, these may be
-        // either dummy motors that just log data or real ones that drive the hardware
-        mMotor = mf.getServo("left_hand");      // for compatability with ConceptScanServo
+        // get the servo
+        mMotor = rh.mServo;
 
         // create the root sequence for this autonomous OpMode
         mSequence = new AutoLib.LinearSequence();
