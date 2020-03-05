@@ -38,6 +38,12 @@ public class SkystoneAutoBlue1 extends SkyStoneAutoBase {
         // create the base for this autonomous OpMode
         super.init();
 
+        // initial position and orientation of bot in this opMode is along Blue wall near the red loading zone facing the Red side
+        rh.mIMU.setHeadingOffset(180);  // initially bot is facing in (Vuforia) field -Y direction
+        Position initialPosn = new Position(DistanceUnit.INCH, -36.0, 72.0-ROBOT_LENGTH/2, 0.0, 0); // at the BLUE wall
+        SensorLib.EncoderGyroPosInt.DriveType dt = SensorLib.EncoderGyroPosInt.DriveType.XDRIVE;
+        mPosInt = new SensorLib.EncoderGyroPosInt(dt,this, rh.mIMU, rh.mMotors, countsPerRev, wheelDiam, initialPosn);
+
         // create an autonomous sequence with the steps to drive
         // several legs of a polygonal course ---
         float movePower = 0.4f;     // set this to go at whatever speed you want to move from point to point

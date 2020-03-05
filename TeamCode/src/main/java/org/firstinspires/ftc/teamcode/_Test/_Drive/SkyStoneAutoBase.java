@@ -249,13 +249,6 @@ public class SkyStoneAutoBase extends OpMode {
         float KiCutoff = 10.0f;    // maximum angle error for which we update integrator
         mPid = new SensorLib.PID(Kp, Ki, Kd, KiCutoff);    // make the object that implements PID control algorithm
 
-        // initial position and orientation of bot is along Blue wall near the red loading zone facing the Red side
-        rh.mIMU.setHeadingOffset(180);  // initially bot is facing in (Vuforia) field -Y direction
-        Position initialPosn = new Position(DistanceUnit.INCH, -36.0, 72.0-ROBOT_LENGTH/2, 0.0, 0); // at the BLUE wall
-        SensorLib.EncoderGyroPosInt.DriveType dt = SensorLib.EncoderGyroPosInt.DriveType.XDRIVE;
-        //SensorLib.EncoderGyroPosInt.DriveType.MECANUM;
-        mPosInt = new SensorLib.EncoderGyroPosInt(dt,this, rh.mIMU, rh.mMotors, countsPerRev, wheelDiam, initialPosn);
-
         // (option) Start up Vuforia
         final boolean bUseVuforia = false;
         if (bUseVuforia) {
