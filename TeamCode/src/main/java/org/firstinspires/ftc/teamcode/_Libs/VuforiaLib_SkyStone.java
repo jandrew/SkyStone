@@ -78,51 +78,6 @@ class myVuforiaLocalizerImpl extends VuforiaLocalizerImpl
     public void _close()  { close(); }
 }
 
-// derive our own Listener from the default VuforiaTrackableDefaultListener so we can add checking of
-// detection status --- we need to know when detection is iffy so we can ignore bad location data.
-class myVuforiaTrackableDefaultListener extends VuforiaTrackableDefaultListener
-{
-    /*
-        public static final class STATUS {
-        public static final int NO_POSE = 0;
-        public static final int LIMITED = 1;
-        public static final int DETECTED = 2;
-        public static final int TRACKED = 3;
-        public static final int EXTENDED_TRACKED = 4;
-
-        private STATUS() {
-        }
-     */
-    private int mStatus = 0;
-
-    /*
-        public static final class STATUS_INFO {
-        public static final int NORMAL = 0;
-        public static final int UNKNOWN = 1;
-        public static final int INITIALIZING = 2;
-        public static final int EXCESSIVE_MOTION = 3;
-        public static final int INSUFFICIENT_FEATURES = 4;
-
-        public STATUS_INFO() {
-        }
-    }
-    */
-    private int mStatusInfo = 0;
-
-    public myVuforiaTrackableDefaultListener(VuforiaTrackable trackable) {
-        super(trackable);
-    }
-
-        @Override public void onTracked(TrackableResult trackableResult, CameraName cameraName, Camera camera, VuforiaTrackable child)
-    {
-        super.onTracked(trackableResult, cameraName, camera, child);
-        mStatus = trackableResult.getStatus();
-        mStatusInfo = trackableResult.getStatusInfo();
-    }
-
-    public int getStatus() { return mStatus; }
-    public int getStatusInfo() { return mStatusInfo; }
-}
 
 // wrapper around Vuforia stuff that handles details like positioning targets and camera, supplying key, etc.
 public class VuforiaLib_SkyStone implements HeadingSensor, LocationSensor {
@@ -220,7 +175,7 @@ public class VuforiaLib_SkyStone implements HeadingSensor, LocationSensor {
 
         // Load the data sets for the trackable objects. These particular data
         // sets are stored in the 'assets' part of our application.
-        targetsSkyStone = this.vuforia.loadTrackablesFromAsset("Skystone", myVuforiaTrackableDefaultListener.class);
+        targetsSkyStone = this.vuforia.loadTrackablesFromAsset("Skystone");
 
         stoneTarget = targetsSkyStone.get(0);
         stoneTarget.setName("Stone Target");
@@ -419,9 +374,6 @@ public class VuforiaLib_SkyStone implements HeadingSensor, LocationSensor {
         for (VuforiaTrackable trackable : allTrackables) {
 
             if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
-                // get status data to see if we can trust this info
-                trackableStatus = ((myVuforiaTrackableDefaultListener)trackable.getListener()).getStatus();
-                trackableStatusInfo = ((myVuforiaTrackableDefaultListener)trackable.getListener()).getStatusInfo();
 
                 if (bTelemetry) {
                     mOpMode.telemetry.addData(trackable.getName(), "Visible");    //
