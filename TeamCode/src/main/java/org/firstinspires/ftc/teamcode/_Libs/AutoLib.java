@@ -462,6 +462,51 @@ public class AutoLib {
 
     }
 
+    // a Step that runs a DcMotor at a given power, to a given absolute encoder count
+    static public class EncoderMotorStepAbs extends Step implements SetPower {
+        DcMotor mMotor;    // motor to control
+        double mPower;          // power level to use
+        int mEncoderCount;      // incremental target encoder count
+        boolean mStop;          // stop motor when count is reached
+
+        public EncoderMotorStepAbs(DcMotor motor, double power, int count, boolean stop) {
+            mMotor = motor;
+            mPower = power;
+            mEncoderCount = count;
+            mStop = stop;
+        }
+
+        // for dynamic adjustment of power during the Step
+        public void setPower(double power) {
+            mPower = power;
+        }
+
+        public boolean loop() {
+            super.loop();
+
+            boolean done = false;
+
+            // we need a little state machine to make the encoders happy
+            if (firstLoopCall()) {
+                // set up the motor on our first call
+                mMotor.setTargetPosition(mEncoderCount);  // count is the ABSOLUTE target position
+                mMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                mMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                mMotor.setPower(mPower);
+            }
+
+            // the rest of the time, just update power and check to see if we're done
+            done = !mMotor.isBusy();
+            if (done && mStop)
+                mMotor.setPower(0);     // optionally stop motor when target reached
+            else
+                mMotor.setPower(mPower);        // update power in case it changed
+
+            return done;
+        }
+
+    }
+
     // a Step that drives a Servo to a given position
     // it would be nice if we got actual position info back from the servo, but that's not
     // how it works, so client sequences should either

@@ -239,7 +239,7 @@ public class SkystoneAutoBlue1 extends OpMode {
         double wheelDiam = 4.7;		    // wheel diameter (in)
 
         // initial position and orientation of bot is along Blue wall near the red loading zone facing the Red side
-        rh.mIMU.setHeadingOffset(180);  // initially bot is facing in (Vuforia) field -Y direction, whereas, for us, +Y is bearing zero
+        rh.mIMU.setHeadingOffset(180);  // initially bot is facing in (Vuforia) field -Y direction
         Position initialPosn = new Position(DistanceUnit.INCH, -36.0, 72.0-ROBOT_LENGTH/2, 0.0, 0); // at the BLUE wall
         SensorLib.EncoderGyroPosInt.DriveType dt = SensorLib.EncoderGyroPosInt.DriveType.XDRIVE;
                         //SensorLib.EncoderGyroPosInt.DriveType.MECANUM;
@@ -254,21 +254,25 @@ public class SkystoneAutoBlue1 extends OpMode {
 
         // create an autonomous sequence with the steps to drive
         // several legs of a polygonal course ---
-        float movePower = 0.4f;
+        float movePower = 0.4f;     // set this to go at whatever speed you want to move from point to point
 
         // create the root Sequence for this autonomous OpMode
         mSequence = new AutoLib.LinearSequence();
         float tol = 1.0f;   // tolerance in inches
 
+        final float SERVO_GRAB = 0.4f;                  // TBD ...
+        final float SERVO_RELEASE = 0.7f;               // TBD ...
+        final int WRIST_RAISED = countsPerRev/4;        // quarter turn of the wrist motor from initial UP position
+        final int WRIST_LOWERED = countsPerRev/2;       // half turn of the wrist motor from initial UP position
+        final int LIFT_ONE_INCH = (int)(countsPerRev*1.5f);   // or whatever ... measure this ... TBD
+        final int LIFT_STONE_GRAB = LIFT_ONE_INCH*1;          // correct lift height to grab stone ... TBD
+
         // add a bunch of position integrator "legs" to the sequence -- uses absolute field coordinate system
         // corresponding to Vuforia convention of +X to the rear and +Y to the Blue side
-        // Vuforia convention is bearing zero = +X while our code uses bearing zero = +Y, so there's an offset
-        final float boff = -90;  // bearing offset of our convention (+Y to rear of field) vs. Vuforia's (+Y to Blue side)
-        // coordinates and bearings below are in Vuforia terms to be compatible with Vuforia position updates if we use them.
 
         // get closer to the Skystones so Vuforia can see the Skystone image better
         Position lookLoc = new Position(DistanceUnit.INCH, -36, 40+ROBOT_LENGTH/2, 0., 0);
-        mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid, lookLoc, -90+boff, tol, true));
+        mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid, lookLoc, -180, tol, true));
 
         // look for the Skystone with the image and update the target Position for the next move to go to it
         // default to the middle Stone if we don't see one ...
@@ -279,73 +283,87 @@ public class SkystoneAutoBlue1 extends OpMode {
         cs1.add(new FindSkystoneStep(this, lookLoc, skyLoc, 3.0f));         // look for SkyStone ...
         cs1.add(new LogPosition(this, "skyLoc", skyLoc,0.0f));       // ... and report target position while searching
 
+        // ... and lower the gripper from its initial UP position while we're looking ... leave power on to maintain position
+        cs1. add(new AutoLib.EncoderMotorStepAbs(rh.mWrist, 0.5, WRIST_LOWERED, false));
+
         // drive to the SkyStone if we found it, otherwise to the default (middle) stone.
-        mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid, skyLoc, -90+boff, tol, true));
+        mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid, skyLoc, -180, tol, true));
 
         // grab the Skystone
-        // mSequence.add(new AutoLib.ServoStep());
-        mSequence.add(new AutoLib.LogTimeStep(this, "grab Stone", 2));
+        mSequence.add(new AutoLib.ServoStep(rh.mServo, SERVO_GRAB));
+
+        // raise wrist to lift the stone off the ground
+        mSequence.add(new AutoLib.EncoderMotorStepAbs(rh.mWrist, 1.0, WRIST_RAISED, false));
 
         // back up a bit to pull the stone out of the line of stones
         Position pullLoc = new Position(DistanceUnit.INCH, 0, 0, 0., 0);
         mSequence.add(new ComputePositionStep(skyLoc, new Position(DistanceUnit.INCH, 0, 12, 0, 0), pullLoc));
-        mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid, pullLoc, -90+boff, tol, false));
+        mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid, pullLoc, -180, tol, false));
 
         // go to the Blue Foundation
         mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
-                new Position(DistanceUnit.INCH, 48, 32, 0., 0), -90+boff, tol, true));
+                new Position(DistanceUnit.INCH, 48, 32, 0., 0), -180, tol, true));
 
-        // do the next two Steps in parallel
+        // do the next Steps in parallel: raise the lift a little bit, lower the wrist
         AutoLib.ConcurrentSequence cs2 = new AutoLib.ConcurrentSequence();
+        cs2.add(new AutoLib.EncoderMotorStepAbs(rh.mLift, 1.0, LIFT_ONE_INCH, false));
+        cs2.add(new AutoLib.EncoderMotorStepAbs(rh.mWrist, 1.0, WRIST_LOWERED, false));
         mSequence.add(cs2);
 
         // drop the Skystone
-        // cs2.add(new AutoLib.ServoStep());
-        cs2.add(new AutoLib.LogTimeStep(this, "drop Stone", 2));
+        mSequence.add(new AutoLib.ServoStep(rh.mServo, SERVO_RELEASE));
 
-        // grab the Foundation
-        // cs2.add(new AutoLib.ServoStep());
-        cs2.add(new AutoLib.LogTimeStep(this, "grab Foundation", 2));
+        // next, grab the Foundation by lowering the lift ... might have to do more to actually grab okay ...
+        mSequence.add(new AutoLib.EncoderMotorStepAbs(rh.mLift, 1.0, LIFT_ONE_INCH/2, false));
 
         // drag the Foundation to the Building Area
         mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
-                new Position(DistanceUnit.INCH, 48, 62, 0., 0), -90+boff, tol, true));
+                new Position(DistanceUnit.INCH, 48, 62, 0., 0), -180, tol, true));
 
-        // release the Foundation
-        // mSequence.add(new AutoLib.ServoStep());
-        mSequence.add(new AutoLib.LogTimeStep(this, "release Foundation", 2));
+        // release the Foundation by raising the lift
+        mSequence.add(new AutoLib.EncoderMotorStepAbs(rh.mLift, 1.0, LIFT_ONE_INCH*2, false));
 
         // slide out of the corridor left by positioning the Foundation
         mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
-                new Position(DistanceUnit.INCH, 0, 62, 0., 0), -90+boff, tol, false));
+                new Position(DistanceUnit.INCH, 0, 62, 0., 0), -180, tol, false));
         mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
-                new Position(DistanceUnit.INCH, 0, 48, 0., 0), -90+boff, tol, false));
+                new Position(DistanceUnit.INCH, 0, 48, 0., 0), -180, tol, false));
+
+        // lower the lift to get under the bridge
+        mSequence.add(new AutoLib.EncoderMotorStepAbs(rh.mLift, 1.0, LIFT_ONE_INCH*0, false));
 
         // return to the quarry for a second SkyStone
         mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
-                new Position(DistanceUnit.INCH, -60, 32, 0., 0), -90+boff, tol, true));
+                new Position(DistanceUnit.INCH, -60, 32, 0., 0), -180, tol, true));
 
         // grab the Skystone
-        // mSequence.add(new AutoLib.ServoStep());
-        mSequence.add(new AutoLib.LogTimeStep(this, "grab Stone", 2));
+        mSequence.add(new AutoLib.ServoStep(rh.mServo, SERVO_GRAB));
+
+        // raise wrist to lift the stone off the ground
+        mSequence.add(new AutoLib.EncoderMotorStepAbs(rh.mWrist, 1.0, WRIST_RAISED, false));
 
         // back up a bit to pull the stone out of the line of stones
         mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
-                new Position(DistanceUnit.INCH, -60, 40, 0., 0), -90+boff, tol, false));
+                new Position(DistanceUnit.INCH, -60, 40, 0., 0), -180, tol, false));
 
         // bring it to the audience end of the Foundation via the Blue Skybridge
         mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
-                new Position(DistanceUnit.INCH, 0, 48, 0., 0), -90+boff, tol, false));
+                new Position(DistanceUnit.INCH, 0, 48, 0., 0), -180, tol, false));
         mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
-                new Position(DistanceUnit.INCH, 24, 60, 0., 0), 0+boff, tol, true));
+                new Position(DistanceUnit.INCH, 24, 60, 0., 0), -90, tol, true));
+
+        // do the next Steps in parallel: raise the lift a little bit, lower the wrist
+        AutoLib.ConcurrentSequence cs3 = new AutoLib.ConcurrentSequence();
+        cs3.add(new AutoLib.EncoderMotorStepAbs(rh.mLift, 1.0, LIFT_ONE_INCH, false));
+        cs3.add(new AutoLib.EncoderMotorStepAbs(rh.mWrist, 1.0, WRIST_LOWERED, false));
+        mSequence.add(cs3);
 
         // drop the Skystone
-        // cs2.add(new AutoLib.ServoStep());
-        mSequence.add(new AutoLib.LogTimeStep(this, "drop Stone", 2));
+        mSequence.add(new AutoLib.ServoStep(rh.mServo, SERVO_RELEASE));
 
         // park under the SkyBridge
         mSequence.add(new VfSqPosIntDriveToStep(this, mPosInt, rh.mMotors, movePower, mPid,
-                new Position(DistanceUnit.INCH, 0, 48, 0., 0), 0+boff, tol, true));
+                new Position(DistanceUnit.INCH, 0, 48, 0., 0), -90, tol, true));
 
         // start out not-done
         bDone = false;

@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode._Libs.TestHardware;
 public class RobotHardware {
 
     public DcMotor[] mMotors;
+    public DcMotor mLift;
+    public DcMotor mWrist;
     public BNO055IMUHeadingSensor mIMU;
     public Servo mServo;
 
@@ -34,6 +36,10 @@ public class RobotHardware {
                 (mMotors[2] = mf.getDcMotor("left_motor")).setDirection(DcMotor.Direction.REVERSE);
                 (mMotors[3] = mf.getDcMotor("left_motor")).setDirection(DcMotor.Direction.REVERSE);
             }
+
+            // get lift and wrist motors --->>> need to decide on positive direction of motion for these ...
+            mLift = mf.getDcMotor("lift");
+            mWrist = mf.getDcMotor("wrist");
 
             // get hardware IMU and wrap gyro in HeadingSensor object usable below
             mIMU = new BNO055IMUHeadingSensor(opmode.hardwareMap.get(BNO055IMU.class, "imu"));
