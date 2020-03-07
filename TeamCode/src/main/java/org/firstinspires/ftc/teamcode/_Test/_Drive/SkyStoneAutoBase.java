@@ -205,15 +205,19 @@ public class SkyStoneAutoBase extends OpMode {
     final float MM_TO_INCH = 25.4f;
 
     // parameters needed to create Encoder/gyro-based PositionIntegrator to keep track of where we are on the field
-    int countsPerRev = 753;		    // for GOBILDA - actually 753.2
-    double wheelDiam = 4.7;		    // wheel diameter (in)
+    final int GOBILDA_countsPerRev = 753;		    // for main drive GOBILDA motors - actually 753.2
+    final double wheelDiam = 4.7;		            // wheel diameter (in)
 
+    // block-grabber servo positions
     final float SERVO_GRAB = 0.4f;                  // TBD ...
     final float SERVO_RELEASE = 0.7f;               // TBD ...
-    final int WRIST_RAISED = countsPerRev/4;        // quarter turn of the wrist motor from initial UP position
-    final int WRIST_LOWERED = countsPerRev/2;       // half turn of the wrist motor from initial UP position
-    final int LIFT_ONE_INCH = (int)(countsPerRev*1.5f);   // or whatever ... measure this ... TBD
-    final int LIFT_STONE_GRAB = LIFT_ONE_INCH*1;          // correct lift height to grab stone ... TBD
+
+    // lift and wrist motor parameters
+    final int HEX_countsPerRev = 288;               // for lift and wrist HEX motors
+    final int WRIST_RAISED = HEX_countsPerRev/4;                // quarter turn of the wrist motor from initial UP position
+    final int WRIST_LOWERED = HEX_countsPerRev/2;               // half turn of the wrist motor from initial UP position
+    final int LIFT_ONE_INCH = (int)(HEX_countsPerRev*1.5f);     // or whatever ... measure this ... TBD
+    final int LIFT_STONE_GRAB = LIFT_ONE_INCH*1;                // correct lift height to grab stone ... TBD
 
 
     /**

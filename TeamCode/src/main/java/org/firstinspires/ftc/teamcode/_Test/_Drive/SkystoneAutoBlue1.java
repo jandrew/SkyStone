@@ -42,7 +42,7 @@ public class SkystoneAutoBlue1 extends SkyStoneAutoBase {
         rh.mIMU.setHeadingOffset(180);  // initially bot is facing in (Vuforia) field -Y direction
         Position initialPosn = new Position(DistanceUnit.INCH, -36.0, 72.0-ROBOT_LENGTH/2, 0.0, 0); // at the BLUE wall
         SensorLib.EncoderGyroPosInt.DriveType dt = SensorLib.EncoderGyroPosInt.DriveType.XDRIVE;
-        mPosInt = new SensorLib.EncoderGyroPosInt(dt,this, rh.mIMU, rh.mMotors, countsPerRev, wheelDiam, initialPosn);
+        mPosInt = new SensorLib.EncoderGyroPosInt(dt,this, rh.mIMU, rh.mMotors, GOBILDA_countsPerRev, wheelDiam, initialPosn);
 
         // create an autonomous sequence with the steps to drive
         // several legs of a polygonal course ---
